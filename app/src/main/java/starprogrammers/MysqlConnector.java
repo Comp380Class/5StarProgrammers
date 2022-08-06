@@ -3,11 +3,11 @@ package starprogrammers;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class mysqlConnector {
+public class MysqlConnector {
   Connection conn;
   String url1, user, password;
 
-  public mysqlConnector(String url, String user, String password) {
+  public MysqlConnector(String url, String user, String password) {
     url1 = url;
     this.user = user;
     this.password = password;

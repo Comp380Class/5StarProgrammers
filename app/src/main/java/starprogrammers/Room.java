@@ -1,3 +1,5 @@
+package starprogrammers;
+
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -68,7 +70,7 @@ public class Room implements Comparable<Room> {
     }
 
     public String toString() {
-        return customerName + "(" + numberOfOccupants + "):" +roomType + " " + bedType;
+        return "Room Number: "+ roomNumber + " " + "Number of occupants allowed: " + numberOfOccupants + " Room Type: " +roomType + " Bed Type: " + bedType;
     }
 
     @Override
