@@ -2,21 +2,20 @@ package starprogrammers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class MysqlConnector {
   Connection conn;
-  String url1, user, password;
+    
+  private final static String url = URL;
+  private final static String user = USER;
+  private final static String password = PASSWORD;
 
-  public MysqlConnector(String url, String user, String password) {
-    url1 = url;
-    this.user = user;
-    this.password = password;
-  }
+  public MysqlConnector() {}
 
   public boolean connect() {
-
     try {
-      this.conn = DriverManager.getConnection(url1, user, password);
+      this.conn = DriverManager.getConnection(url, user, password);
       return true;
 
     } catch (Exception ex) {
@@ -24,5 +23,9 @@ public class MysqlConnector {
       ex.printStackTrace();
       return false;
     }
+  }
+  
+  public static Connection getConnection() throws SQLException{
+      return DriverManager.getConnection(url, user, password);
   }
 }
