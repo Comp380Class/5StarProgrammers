@@ -63,6 +63,8 @@ public class ReservationDataBase {
 
     /**
      * Checks to see if row in table already exists
+     * @param firstName user's first name 
+     * @param lastName user's last name
      */
     private boolean doesRowExist(String firstName, String LastName){
         String sql = "SELECT first_name FROM Reservation WHERE first_name = ? AND last_name = ?";
@@ -84,6 +86,15 @@ public class ReservationDataBase {
 
     /**
      * Inserts data into reservation table
+     * @param firstName
+     * @param lastName
+     * @param customerAge
+     * @param customerPaymentInfo
+     * @param customerEmail
+     * @param totalOccupants
+     * @param roomNumber
+     * @param checkIn
+     * @param checkOut
      */
     public void insertReservation(String firstName, String lastName, int customerAge,
         String customerPaymentInfo, String customerEmail, int totalOccupants, 
@@ -139,8 +150,9 @@ public class ReservationDataBase {
 
     /**
      * Updates check in date
+     * @param currentDate
      * @param newDate
-     * @param customerName
+     * @param roomNumber
      */
     public void modifyCheckIn(Date currentDate, Date newDate, int roomNumber){
         String sql1 = "UPDATE Reservation SET check_in = ? WHERE room_number = ?";
@@ -158,8 +170,9 @@ public class ReservationDataBase {
 
     /**
     * Updates check out date
+    * @param currentDate
     * @param newDate
-    * @param customerName
+    * @param roomNumber
     */
     public void modifyCheckOut(Date currentDate, Date newDate, int roomNumber){
         String sql = "UPDATE Reservation SET check_out = ? WHERE room_number = ?";
@@ -177,8 +190,8 @@ public class ReservationDataBase {
 
     /**
      * Updates room number
-     * @param newDate
-     * @param customerName
+     * @param currentRoom
+     * @param newRoom
      */
     public void modifyRoomNumber(int currentRoom, int newRoom){
         String sql = "UPDATE Reservation SET room_number = ? WHERE room_number = ?";
@@ -196,8 +209,6 @@ public class ReservationDataBase {
 
     /**
      * Removes reservation from database
-     * @param newDate
-     * @param customerName
      */
     public void cancelReservation(){
         String sql = "delete from Reservation where first_name=?";
@@ -213,7 +224,3 @@ public class ReservationDataBase {
         }
   }
 }
-
-
-
-// create reservation management class
