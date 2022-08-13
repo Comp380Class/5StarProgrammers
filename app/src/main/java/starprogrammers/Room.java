@@ -4,7 +4,8 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class Room implements Comparable<Room> {
-    private String customerName;
+    private String firstName;
+    private String lastName;
     private int roomNumber;
     private String roomType;
     private String bedType;
@@ -12,12 +13,11 @@ public class Room implements Comparable<Room> {
     private int roomPrice;
     private int numberOfOccupants;
 
-    public Room() {
+    public Room() {}
 
-    }
-
-    public Room(String customerName,int roomNumber,String roomType,String bedType,int bedQuantity,int roomPrice,int numberOfOccupants) {
-        this.customerName = customerName;
+    public Room(String lasName, String firstName, int roomNumber,String roomType,String bedType,int bedQuantity,int roomPrice,int numberOfOccupants) {
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.roomNumber = roomNumber;
         this.roomType = roomType;
         this.bedType = bedType;
@@ -26,14 +26,10 @@ public class Room implements Comparable<Room> {
         this.numberOfOccupants = numberOfOccupants;
     }
 
-    public void changeRoomType(){
-
-    }
-
     public int getnumberOfOccupants() { return numberOfOccupants; }
 
     public String customerName(){
-        return customerName;
+        return firstName + " " + lastName;
     }
 
     public String roomType(){
@@ -43,6 +39,8 @@ public class Room implements Comparable<Room> {
     public String bedType(){
         return bedType;
     }
+
+    public int getPrice(){return roomPrice;}
 
     public void readFrom(Scanner input) {
         roomNumber = input.nextInt();   
@@ -54,7 +52,9 @@ public class Room implements Comparable<Room> {
     }
 
     public void writeTo(PrintWriter output) {
-        output.print(customerName);
+        output.print(firstName);
+        output.print(" ");
+        output.print(lastName);
         output.print(" ");
         output.print(roomNumber);
         output.print(" ");
@@ -81,4 +81,13 @@ public class Room implements Comparable<Room> {
             return 1;
         return 0;
     }
+
+    public String roomInfo(){
+        return "\nPrice/Night: "
+            + roomPrice
+            + "\nType of room: "
+            + roomType
+            + "\nBed Quantity: " + bedQuantity
+            + "\nRoom Number: " + roomNumber;
+      }
 }
