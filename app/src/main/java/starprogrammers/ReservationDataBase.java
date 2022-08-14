@@ -18,7 +18,7 @@ public class ReservationDataBase {
             try(Connection conn = MysqlConnector.getConnection();){
                 final String createTable =
                 "CREATE TABLE sql3511682.Reservation ("
-                    + "reservation_id INT(255) NOT NULL,"
+                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
                     + "last_name VARCHAR(255) NOT NULL,"
                     + "first_name VARCHAR(255) NOT NULL,"
                     + "age INT(255) NOT NULL,"
@@ -100,18 +100,19 @@ public class ReservationDataBase {
     public void insertReservation(Reservation r){
         if(!doesRowExist(r.getFirstName(),r.getLastName())){
         try(Connection conn = MysqlConnector.getConnection();) {      
-            String SQL = "INSERT INTO Reservation VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO Reservation (last_name, first_name, age,"
+            + " payment_info, email, total_occupants, room_number,"
+            + " check_in, check_out)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setInt(1, r.getId());
-            pstmt.setString(2, r.getLastName());
-            pstmt.setString(3, r.getFirstName());
-            pstmt.setInt(4, r.getCustomerAge());
-            pstmt.setString(5, r.getCustomerPaymentInfo());
-            pstmt.setString(6, r.getCustomerEmail());
-            pstmt.setInt(7, r.getTotalOccupants());
-            pstmt.setInt(8, r.getRoomNumber());
-            pstmt.setDate(9, r.getCheckIn());
-            pstmt.setDate(10, r.getCheckOut());
+            pstmt.setString(1, r.getLastName());
+            pstmt.setString(2, r.getFirstName());
+            pstmt.setInt(3, r.getCustomerAge());
+            pstmt.setString(4, r.getCustomerPaymentInfo());
+            pstmt.setString(5, r.getCustomerEmail());
+            pstmt.setInt(6, r.getTotalOccupants());
+            pstmt.setInt(7, r.getRoomNumber());
+            pstmt.setDate(8, r.getCheckIn());
+            pstmt.setDate(9, r.getCheckOut());
 
             pstmt.executeUpdate();
             System.out.println("Inserted records into the table...");         
