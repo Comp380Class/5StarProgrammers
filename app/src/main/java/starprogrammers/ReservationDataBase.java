@@ -18,7 +18,7 @@ public class ReservationDataBase {
             try(Connection conn = MysqlConnector.getConnection();){
                 final String createTable =
                 "CREATE TABLE sql3511682.Reservation ("
-                    + "reservation_id VARCHAR(255) NOT NULL,"
+                    + "reservation_id INT(255) NOT NULL,"
                     + "last_name VARCHAR(255) NOT NULL,"
                     + "first_name VARCHAR(255) NOT NULL,"
                     + "age INT(255) NOT NULL,"
@@ -97,23 +97,21 @@ public class ReservationDataBase {
      * @param checkIn
      * @param checkOut
      */
-    public void insertReservation(String reservationId, String firstName, String lastName, int customerAge,
-        String customerPaymentInfo, String customerEmail, int totalOccupants, 
-        int roomNumber,Date checkIn, Date checkOut){
-        if(!doesRowExist(firstName,lastName)){
+    public void insertReservation(Reservation r){
+        if(!doesRowExist(r.getFirstName(),r.getLastName())){
         try(Connection conn = MysqlConnector.getConnection();) {      
             String SQL = "INSERT INTO Reservation VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, reservationId);
-            pstmt.setString(2, lastName);
-            pstmt.setString(3, firstName);
-            pstmt.setInt(4, customerAge);
-            pstmt.setString(5, customerPaymentInfo);
-            pstmt.setString(6, customerEmail);
-            pstmt.setInt(7, totalOccupants);
-            pstmt.setInt(8, roomNumber);
-            pstmt.setDate(9, checkIn);
-            pstmt.setDate(10, checkOut);
+            pstmt.setInt(1, r.getId());
+            pstmt.setString(2, r.getLastName());
+            pstmt.setString(3, r.getFirstName());
+            pstmt.setInt(4, r.getCustomerAge());
+            pstmt.setString(5, r.getCustomerPaymentInfo());
+            pstmt.setString(6, r.getCustomerEmail());
+            pstmt.setInt(7, r.getTotalOccupants());
+            pstmt.setInt(8, r.getRoomNumber());
+            pstmt.setDate(9, r.getCheckIn());
+            pstmt.setDate(10, r.getCheckOut());
 
             pstmt.executeUpdate();
             System.out.println("Inserted records into the table...");         
@@ -134,7 +132,7 @@ public class ReservationDataBase {
         try(Connection conn = MysqlConnector.getConnection();) {     
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql1);
-            System.out.println("Last First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
+            System.out.println("ID\tLast First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
                 while(resultSet.next()){
                     System.out.println(
                     resultSet.getString("reservation_id") + "\t" +    
