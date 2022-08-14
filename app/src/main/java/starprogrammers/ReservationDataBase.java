@@ -18,6 +18,7 @@ public class ReservationDataBase {
             try(Connection conn = MysqlConnector.getConnection();){
                 final String createTable =
                 "CREATE TABLE sql3511682.Reservation ("
+                    + "id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,"
                     + "last_name VARCHAR(255) NOT NULL,"
                     + "first_name VARCHAR(255) NOT NULL,"
                     + "age INT(255) NOT NULL,"
@@ -96,22 +97,22 @@ public class ReservationDataBase {
      * @param checkIn
      * @param checkOut
      */
-    public void insertReservation(String firstName, String lastName, int customerAge,
-        String customerPaymentInfo, String customerEmail, int totalOccupants, 
-        int roomNumber,Date checkIn, Date checkOut){
-        if(!doesRowExist(firstName,lastName)){
+    public void insertReservation(Reservation r){
+        if(!doesRowExist(r.getFirstName(),r.getLastName())){
         try(Connection conn = MysqlConnector.getConnection();) {      
-            String SQL = "INSERT INTO Reservation VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO Reservation (last_name, first_name, age,"
+            + " payment_info, email, total_occupants, room_number,"
+            + " check_in, check_out)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, lastName);
-            pstmt.setString(2, firstName);
-            pstmt.setInt(3, customerAge);
-            pstmt.setString(4, customerPaymentInfo);
-            pstmt.setString(5, customerEmail);
-            pstmt.setInt(6, totalOccupants);
-            pstmt.setInt(7, roomNumber);
-            pstmt.setDate(8, checkIn);
-            pstmt.setDate(9, checkOut);
+            pstmt.setString(1, r.getLastName());
+            pstmt.setString(2, r.getFirstName());
+            pstmt.setInt(3, r.getCustomerAge());
+            pstmt.setString(4, r.getCustomerPaymentInfo());
+            pstmt.setString(5, r.getCustomerEmail());
+            pstmt.setInt(6, r.getTotalOccupants());
+            pstmt.setInt(7, r.getRoomNumber());
+            pstmt.setDate(8, r.getCheckIn());
+            pstmt.setDate(9, r.getCheckOut());
 
             pstmt.executeUpdate();
             System.out.println("Inserted records into the table...");         
@@ -127,14 +128,16 @@ public class ReservationDataBase {
      * Prints all data in reservation table
      */
     public void printDatabase(){
-        String sql1 = "SELECT first_name, last_name, payment_info, email, "
+        String sql1 = "SELECT reservation_id, first_name, last_name, payment_info, email, "
         + "total_occupants, room_number, check_in, check_out FROM Reservation";
         try(Connection conn = MysqlConnector.getConnection();) {     
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql1);
-            System.out.println("Last First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
+            System.out.println("ID\tLast First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
                 while(resultSet.next()){
-                    System.out.println(resultSet.getString("last_name") + " " + 
+                    System.out.println(
+                    resultSet.getString("reservation_id") + "\t" +    
+                    resultSet.getString("last_name") + " " + 
                     resultSet.getString("first_name")  + "\t" +
                     resultSet.getString("payment_info")  + "\t" +
                     resultSet.getString("email") + "\t\t" +
@@ -211,7 +214,7 @@ public class ReservationDataBase {
      * Removes reservation from database
      */
     public void cancelReservation(){
-        String sql = "delete from Reservation where first_name=?";
+        String sql = "delete from Reservation where reservation_id=?";
         try (Connection conn = MysqlConnector.getConnection();){
         PreparedStatement pstmt = conn.prepareStatement(sql);
       
