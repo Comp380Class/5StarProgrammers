@@ -7,23 +7,11 @@ import java.sql.SQLException;
 public class MysqlConnector {
   Connection conn;
     
-  private final static String url = URL;
-  private final static String user = USER;
-  private final static String password = PASSWORD;
+  private final static String url = "jdbc:mysql://sql3.freesqldatabase.com/sql3511682";
+  private final static String user = "sql3511682";
+  private final static String password = "4SYTxuwY6W";
 
   public MysqlConnector() {}
-
-  public boolean connect() {
-    try {
-      this.conn = DriverManager.getConnection(url, user, password);
-      return true;
-
-    } catch (Exception ex) {
-      System.out.println("An error occurred.");
-      ex.printStackTrace();
-      return false;
-    }
-  }
   
   public static Connection getConnection() throws SQLException{
       return DriverManager.getConnection(url, user, password);

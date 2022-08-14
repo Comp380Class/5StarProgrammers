@@ -1,34 +1,37 @@
 package starprogrammers;
 
-import java.time.LocalDate;
 import java.util.*;
 
 public class Hotel {
 
-  private Hotel() {}
-
-  private static ArrayList<Room> availableRooms = new ArrayList<Room>();
+  private Hotel() {
+  }
 
   /** @return returns an ArrayList of all currently available rooms. */
-  public static ArrayList<Room> getAvailableRooms() {
-    // TODO: Add code for getting rooms once we figure out how we're querying to DB
-    //	ReservationGenerator.getAvailableRooms();
-    return availableRooms;
+  public static void printAllRooms() {
+    ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
+    for (Room room : allRooms) {
+      System.out.println(room);
+    }
   }
+
   /** @return returns an ArrayList of all current reservations. */
-  public ArrayList<Reservation> getReservations() {
+  public static ArrayList<Reservation> getReservations() {
     // TODO: Add code for getting reservations after we figure out the db.
-	  return null;
+    return null;
   }
 
   /** @return returns an ArrayList of all currently reserved rooms. */
-  public ArrayList<Room> getReservedRooms() {
-    // TODO: Call the method from the class managing the rooms.
-	  return null;
+  public static void getReservedRooms() {
+   ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
+   for (Room room : occupiedRooms){
+    System.out.println(room);
+   }
   }
 
   /**
-   * Generates a text-user-interface with various reports that a Manager might want to view.
+   * Generates a text-user-interface with various reports that a Manager might
+   * want to view.
    *
    * @param Scanner object passed from the main method.
    */
@@ -48,8 +51,7 @@ public class Hotel {
           exitFlag = true;
           break;
         case 1: // TODO:
-          System.out.println("CALL getAvailableRooms()  TO LOOK UP ALL ROOMS IN DB");
-          getAvailableRooms();
+          printAllRooms();
           break;
         case 2: // TODO:
           System.out.println("CALL getReservations() TO LOOK UP ALL RESERVATIONS IN DB");
@@ -57,45 +59,15 @@ public class Hotel {
           break;
         case 3: // TODO:
           System.out.println("FIND ROOMS THAT NEED TO BE CHECKED OUT TODAY");
-          // getUnavailableRooms()?
-          // with checkOut today?
+          //User reservation manager to find rooms that should be checked out TODAY.
           break;
         case 4: // TODO:
-          System.out.println("FIND ROOMS THAT ARE CURRENTLY OCCUPIED");
+          getReservedRooms();
           break;
         default:
           System.out.println("Invalid input. Please select one of the following options.");
       }
     }
-  }
-  /**
-   * Receives input from a user to gather customer information.
-   *
-   * @param Scanner object passed in by the main method.
-   */
-  private static void receiveCustomerInformation(Scanner scnr) {
-    System.out.println("Enter Name: ");
-    String customerName = scnr.next();
-    System.out.println("Enter Age: ");
-    int customerAge = scnr.nextInt();
-    System.out.println("Enter payment information");
-    String customerPaymentInfo = scnr.nextLine();
-    System.out.println("Enter Email: ");
-    String customerEmail = scnr.next();
-    System.out.println("Enter number of occupants: ");
-    int numberOfOccupants = scnr.nextInt();
-    System.out.println("Enter check in date(YYYY MM DD)");
-    int checkInYear = scnr.nextInt();
-    int checkInMonth = scnr.nextInt();
-    int checkInDay = scnr.nextInt();
-    LocalDate checkInDate = LocalDate.of(checkInYear, checkInMonth, checkInDay);
-    System.out.println("Enter check out date (YYYY MM DD)");
-    int checkOutYear = scnr.nextInt();
-    int checkOutMonth = scnr.nextInt();
-    int checkOutDay = scnr.nextInt();
-    LocalDate checkOutDate = LocalDate.of(checkOutYear, checkOutMonth, checkOutDay);
-
-    // TODO: NEED TO DO SOMETHING WITH THIS CUSTOMER INFORMATION.
   }
 
   /**
@@ -135,6 +107,7 @@ public class Hotel {
       }
     }
   }
+
   /**
    * Presents a text user interface for employee options and manager reports.
    *
@@ -174,11 +147,12 @@ public class Hotel {
   }
 
   /**
-   * Generates a text-user-interface with 2 options to select the user-type and 1 option to * quit
+   * Generates a text-user-interface with 2 options to select the user-type and 1
+   * option to * quit
    * the program.
    */
   public static void main(String[] args) {
-    createHardCodedRoom();
+    RoomDataBase.initializationOfRoomTable();
     Scanner scnr = new Scanner(System.in);
     boolean exitFlag = false;
     while (!exitFlag) {
@@ -192,14 +166,9 @@ public class Hotel {
           exitFlag = true;
           break;
         case 1:
-          // create user object.
-          // user should have a menu of their options.
-          // user chooses "book room" gather customer information.
           presentUserOptions(scnr);
           break;
         case 3:
-          // create manager object.
-          // manager should have menu of their options.
           presentEmployeeOptions(scnr);
           break;
         default:
@@ -207,10 +176,5 @@ public class Hotel {
           break;
       }
     }
-  }
-  /** Hard coded room just used only for testing and integration. REMOVE BEFORE PROGRAM RELEASE. */
-  private static void createHardCodedRoom() {
-    Room testRoom = new Room("Unassigned", 101, "Suite", "King", 1, 50, 2);
-    availableRooms.add(testRoom);
   }
 }

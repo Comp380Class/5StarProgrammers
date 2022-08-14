@@ -25,6 +25,7 @@ public class Reservation {
     private Date checkIn;
     /** Represents check out date */
     private Date checkOut;
+
     /** Represents the length of stay */
     private static Period period;
 
@@ -220,4 +221,4 @@ public class Reservation {
       int days = (int) totalDays();
       return days * room.getPrice();
     }
- }
+}
