@@ -3,7 +3,6 @@ package starprogrammers;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
-import org.apache.commons.lang3.RandomStringUtils;
 
 public class Reservation {
     /** Represents the reservation number */
@@ -91,7 +90,46 @@ public class Reservation {
         return checkIn.compareTo(checkOut);
     }
 
-    public int getId(){return idCounter;}
+    public int getId(){
+      return idCounter;
+    }
+
+    public String getFirstName(){
+      return customerFirstName;
+    }
+
+    public String getLastName(){
+      return customerLastName;
+    }
+
+    public int getCustomerAge(){
+      return customerAge;
+    }
+
+    public String getCustomerPaymentInfo(){
+      return customerPaymentInfo;
+    }
+
+    public String getCustomerEmail(){
+      return customerEmail;
+    }
+
+    public int getTotalOccupants(){
+      return totalOccupants;
+    }
+
+    public int getRoomNumber(){
+      return roomNumber;
+    }
+
+    public Date getCheckIn(){
+      return checkIn;
+    }
+
+    public Date getCheckOut(){
+      return checkOut;
+    }
+
     /**
      * Converts LocalDate to Date
      * @param dateToConvert
