@@ -28,9 +28,6 @@ public class Reservation {
     /** Represents the length of stay */
     private static Period period;
 
-    /** Represents id counter */
-    private static int id = 0; 
-    private int idCounter = 0;
     /**
      * Constructs a Reservation with customer information.
      *
@@ -64,9 +61,6 @@ public class Reservation {
       this.checkIn = convertLocalDate(checkIn);
       this.checkOut = convertLocalDate(checkOut);
       period = Period.between(checkIn, checkOut);
-      
-      id++; // each new reservation created increases id by 1
-      idCounter = id;
     }
   
     @Override
@@ -88,10 +82,6 @@ public class Reservation {
      */
     public int compareDates(){
         return checkIn.compareTo(checkOut);
-    }
-
-    public int getId(){
-      return idCounter;
     }
 
     public String getFirstName(){
