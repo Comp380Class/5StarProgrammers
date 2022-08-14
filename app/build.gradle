@@ -25,6 +25,12 @@ dependencies {
 
     //
     implementation "mysql:mysql-connector-java:8.0.29"
+
+    implementation("com.sun.mail:javax.mail:1.6.2")
+    implementation files('libs/javax.mail.jar')
+
+    implementation 'com.github.javakeyring:java-keyring:1.0.1'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
 }
 
 application {
@@ -38,4 +44,5 @@ tasks.named('test') {
 }
 run {
 standardInput = System.in
+
 }

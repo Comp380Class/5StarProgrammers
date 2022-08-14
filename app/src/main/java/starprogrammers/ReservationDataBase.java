@@ -18,6 +18,7 @@ public class ReservationDataBase {
             try(Connection conn = MysqlConnector.getConnection();){
                 final String createTable =
                 "CREATE TABLE sql3511682.Reservation ("
+                    + "reservation_id VARCHAR(255) NOT NULL,"
                     + "last_name VARCHAR(255) NOT NULL,"
                     + "first_name VARCHAR(255) NOT NULL,"
                     + "age INT(255) NOT NULL,"
@@ -96,22 +97,23 @@ public class ReservationDataBase {
      * @param checkIn
      * @param checkOut
      */
-    public void insertReservation(String firstName, String lastName, int customerAge,
+    public void insertReservation(String reservationId, String firstName, String lastName, int customerAge,
         String customerPaymentInfo, String customerEmail, int totalOccupants, 
         int roomNumber,Date checkIn, Date checkOut){
         if(!doesRowExist(firstName,lastName)){
         try(Connection conn = MysqlConnector.getConnection();) {      
-            String SQL = "INSERT INTO Reservation VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String SQL = "INSERT INTO Reservation VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(SQL);
-            pstmt.setString(1, lastName);
-            pstmt.setString(2, firstName);
-            pstmt.setInt(3, customerAge);
-            pstmt.setString(4, customerPaymentInfo);
-            pstmt.setString(5, customerEmail);
-            pstmt.setInt(6, totalOccupants);
-            pstmt.setInt(7, roomNumber);
-            pstmt.setDate(8, checkIn);
-            pstmt.setDate(9, checkOut);
+            pstmt.setString(1, reservationId);
+            pstmt.setString(2, lastName);
+            pstmt.setString(3, firstName);
+            pstmt.setInt(4, customerAge);
+            pstmt.setString(5, customerPaymentInfo);
+            pstmt.setString(6, customerEmail);
+            pstmt.setInt(7, totalOccupants);
+            pstmt.setInt(8, roomNumber);
+            pstmt.setDate(9, checkIn);
+            pstmt.setDate(10, checkOut);
 
             pstmt.executeUpdate();
             System.out.println("Inserted records into the table...");         
@@ -127,14 +129,16 @@ public class ReservationDataBase {
      * Prints all data in reservation table
      */
     public void printDatabase(){
-        String sql1 = "SELECT first_name, last_name, payment_info, email, "
+        String sql1 = "SELECT reservation_id, first_name, last_name, payment_info, email, "
         + "total_occupants, room_number, check_in, check_out FROM Reservation";
         try(Connection conn = MysqlConnector.getConnection();) {     
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery(sql1);
             System.out.println("Last First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
                 while(resultSet.next()){
-                    System.out.println(resultSet.getString("last_name") + " " + 
+                    System.out.println(
+                    resultSet.getString("reservation_id") + "\t" +    
+                    resultSet.getString("last_name") + " " + 
                     resultSet.getString("first_name")  + "\t" +
                     resultSet.getString("payment_info")  + "\t" +
                     resultSet.getString("email") + "\t\t" +
@@ -211,7 +215,7 @@ public class ReservationDataBase {
      * Removes reservation from database
      */
     public void cancelReservation(){
-        String sql = "delete from Reservation where first_name=?";
+        String sql = "delete from Reservation where reservation_id=?";
         try (Connection conn = MysqlConnector.getConnection();){
         PreparedStatement pstmt = conn.prepareStatement(sql);
       
