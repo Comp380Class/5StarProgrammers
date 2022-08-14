@@ -5,7 +5,6 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 public class Email {
-
     private static String USER_NAME = "5starprogrammers@gmail.com";
     private static String PASSWORD = "wvalhyiaxohievqu";
 
