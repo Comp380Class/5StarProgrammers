@@ -34,12 +34,19 @@ public class HotelGUI extends javax.swing.JFrame {
         custChangeRsrvnButton = new javax.swing.JButton();
         custCancelRsrvnButton = new javax.swing.JButton();
         EmpMenu = new javax.swing.JDialog();
-        EmpTitle = new javax.swing.JLabel();
+        empTitle = new javax.swing.JLabel();
         empReturnMainButton = new javax.swing.JButton();
         empCheckInCustButton = new javax.swing.JButton();
         empCancelRoomRsrvnButton = new javax.swing.JButton();
         empChangeRoomRsrvnButton = new javax.swing.JButton();
         empGenMangReportButton = new javax.swing.JButton();
+        MangReportMenu = new javax.swing.JDialog();
+        reportTitle = new javax.swing.JLabel();
+        reportShowRoomsButton = new javax.swing.JButton();
+        reportShowResrvnsButton = new javax.swing.JButton();
+        reportShowRoomsToCheckoutButton = new javax.swing.JButton();
+        reportShowOccupiedRoomsButton = new javax.swing.JButton();
+        reportGoBackButton = new javax.swing.JButton();
         MainPanel = new javax.swing.JPanel();
         mainTitle = new javax.swing.JLabel();
         CustButton = new javax.swing.JButton();
@@ -123,8 +130,8 @@ public class HotelGUI extends javax.swing.JFrame {
                 .addContainerGap(34, Short.MAX_VALUE))
         );
 
-        EmpTitle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        EmpTitle.setText("FiveStarProgrammer Employee Menu");
+        empTitle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        empTitle.setText("FiveStarProgrammer Employee Menu");
 
         empReturnMainButton.setText("Return to Main Menu");
         empReturnMainButton.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -176,7 +183,7 @@ public class HotelGUI extends javax.swing.JFrame {
                             .addComponent(empGenMangReportButton)
                             .addComponent(empChangeRoomRsrvnButton)
                             .addComponent(empReturnMainButton)
-                            .addComponent(EmpTitle)
+                            .addComponent(empTitle)
                             .addComponent(empCancelRoomRsrvnButton))
                         .addContainerGap(44, Short.MAX_VALUE))))
         );
@@ -184,7 +191,7 @@ public class HotelGUI extends javax.swing.JFrame {
             EmpMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(EmpMenuLayout.createSequentialGroup()
                 .addGap(43, 43, 43)
-                .addComponent(EmpTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(empTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(empCheckInCustButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -196,6 +203,77 @@ public class HotelGUI extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(empReturnMainButton)
                 .addGap(59, 59, 59))
+        );
+
+        reportTitle.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        reportTitle.setText("FiveStarProgrammer Manager Report");
+
+        reportShowRoomsButton.setText("Show All Rooms In Hotel");
+        reportShowRoomsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportShowRoomsButtonMouseClicked(evt);
+            }
+        });
+
+        reportShowResrvnsButton.setText("Show All Hotel Reservations");
+        reportShowResrvnsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportShowResrvnsButtonMouseClicked(evt);
+            }
+        });
+
+        reportShowRoomsToCheckoutButton.setText("Show All Rooms That Check-out Today ");
+        reportShowRoomsToCheckoutButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportShowRoomsToCheckoutButtonMouseClicked(evt);
+            }
+        });
+
+        reportShowOccupiedRoomsButton.setText("Show All Currently Occupied Rooms");
+        reportShowOccupiedRoomsButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportShowOccupiedRoomsButtonMouseClicked(evt);
+            }
+        });
+
+        reportGoBackButton.setText("Go Back");
+        reportGoBackButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reportGoBackButtonMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout MangReportMenuLayout = new javax.swing.GroupLayout(MangReportMenu.getContentPane());
+        MangReportMenu.getContentPane().setLayout(MangReportMenuLayout);
+        MangReportMenuLayout.setHorizontalGroup(
+            MangReportMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MangReportMenuLayout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(MangReportMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(reportGoBackButton)
+                    .addComponent(reportShowOccupiedRoomsButton)
+                    .addComponent(reportShowRoomsToCheckoutButton)
+                    .addComponent(reportShowResrvnsButton)
+                    .addComponent(reportShowRoomsButton)
+                    .addComponent(reportTitle))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+        MangReportMenuLayout.setVerticalGroup(
+            MangReportMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(MangReportMenuLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(reportTitle)
+                .addGap(32, 32, 32)
+                .addComponent(reportShowRoomsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reportShowResrvnsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reportShowRoomsToCheckoutButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reportShowOccupiedRoomsButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(reportGoBackButton)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -332,8 +410,34 @@ public class HotelGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_empCancelRoomRsrvnButtonMouseClicked
 
     private void empGenMangReportButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_empGenMangReportButtonMouseClicked
-        //generateManagerReport();
+        JDialog rm = this.MangReportMenu;
+        rm.pack();
+        rm.setSize(rm.getPreferredSize().width, rm.getPreferredSize().height);
+        rm.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_empGenMangReportButtonMouseClicked
+
+    private void reportShowRoomsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportShowRoomsButtonMouseClicked
+        Hotel.getAvailableRooms();
+    }//GEN-LAST:event_reportShowRoomsButtonMouseClicked
+
+    private void reportShowResrvnsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportShowResrvnsButtonMouseClicked
+        Hotel.getReservations();
+    }//GEN-LAST:event_reportShowResrvnsButtonMouseClicked
+
+    private void reportShowRoomsToCheckoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportShowRoomsToCheckoutButtonMouseClicked
+        // getUnavailableRooms()?
+        // with checkOut today?
+    }//GEN-LAST:event_reportShowRoomsToCheckoutButtonMouseClicked
+
+    private void reportShowOccupiedRoomsButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportShowOccupiedRoomsButtonMouseClicked
+        Hotel.getReservedRooms();
+    }//GEN-LAST:event_reportShowOccupiedRoomsButtonMouseClicked
+
+    private void reportGoBackButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportGoBackButtonMouseClicked
+        this.EmpMenu.setVisible(true);
+        this.MangReportMenu.setVisible(false);
+    }//GEN-LAST:event_reportGoBackButtonMouseClicked
 
     /**
      * @param args the command line arguments
@@ -374,10 +478,10 @@ public class HotelGUI extends javax.swing.JFrame {
     private javax.swing.JButton CustButton;
     private javax.swing.JDialog CustMenu;
     private javax.swing.JDialog EmpMenu;
-    private javax.swing.JLabel EmpTitle;
     private javax.swing.JButton ExitButton;
     private javax.swing.JPanel MainPanel;
     private javax.swing.JButton MangButton;
+    private javax.swing.JDialog MangReportMenu;
     private javax.swing.JButton custBookButton;
     private javax.swing.JButton custCancelRsrvnButton;
     private javax.swing.JButton custChangeRsrvnButton;
@@ -389,6 +493,13 @@ public class HotelGUI extends javax.swing.JFrame {
     private javax.swing.JButton empCheckInCustButton;
     private javax.swing.JButton empGenMangReportButton;
     private javax.swing.JButton empReturnMainButton;
+    private javax.swing.JLabel empTitle;
     private javax.swing.JLabel mainTitle;
+    private javax.swing.JButton reportGoBackButton;
+    private javax.swing.JButton reportShowOccupiedRoomsButton;
+    private javax.swing.JButton reportShowResrvnsButton;
+    private javax.swing.JButton reportShowRoomsButton;
+    private javax.swing.JButton reportShowRoomsToCheckoutButton;
+    private javax.swing.JLabel reportTitle;
     // End of variables declaration//GEN-END:variables
 }
