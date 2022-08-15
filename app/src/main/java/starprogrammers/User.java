@@ -142,16 +142,20 @@ public class User {
   }
 
   /**
-   * user inputs identifying data(name?, password?, payment info?), if successful
-   * then their reservation is deleted from the database(email confirmation?)
+   *Allows user to cancel their reservation if their reservation key and last name match an
+   * entry in the Reservation table.
    */
   static void cancelReservation() {
-    String name;
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    int reservationKey;
     Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
-
-    // TODO: implement access to database
+    System.out.print("Enter your reservation number: ");
+    reservationKey = input.nextInt();
+    if (reservationManager.doesReservationExist(reservationKey)) {
+      reservationManager.cancelReservation(reservationKey);
+    } else {
+      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+    }
   }
 
   /**
@@ -170,16 +174,27 @@ public class User {
   }
 
   /**
-   * user inputs identifying data(name?, password?, payment info?), if successful
-   * then information regarding their reservation is displayed
+   * Allows the user to view their reservation after they enter their reservation
+   * id number.
    */
   static void viewReservation() {
-    String name;
+    int reservationKey;
+    String userLastName;
     Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
-
-    // TODO: implement access to database to display reservation info
+    System.out.print("Enter your reservation number: ");
+    reservationKey = input.nextInt();
+    System.out.println("Enter your last name: ");
+    userLastName = input.next();
+    Reservation userReservation = ReservationDataBase.getSpecificReservation(reservationKey);
+    if (userReservation != null) {
+      if (userReservation.getLastName().equals(userLastName)) {
+        System.out.println(userReservation);
+      } else {
+        System.out.println("Incorrect information. Please try again.");
+      }
+    } else {
+      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+    }
   }
 }
 
@@ -203,12 +218,16 @@ class Manager extends User {
    * database
    */
   static void cancelRoomReservation() {
-    String name;
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    int reservationKey;
     Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
-
-    // TODO: implement access to database
+    System.out.print("Enter customer's reservation number: ");
+    reservationKey = input.nextInt();
+    if (reservationManager.doesReservationExist(reservationKey)) {
+      reservationManager.cancelReservation(reservationKey);
+    } else {
+      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+    }
   }
 
   /**
