@@ -3,7 +3,10 @@ package starprogrammers;
 import java.util.*;
 
 public class Hotel {
-
+/**
+ * Hotel class serves as the class that allows users and manager/employees to get options on
+ * what they can do.
+ */
   private Hotel() {
   }
 
@@ -16,24 +19,39 @@ public class Hotel {
   }
 
   /** @return returns an ArrayList of all current reservations. */
-  public static ArrayList<Reservation> getReservations() {
-    // TODO: Add code for getting reservations after we figure out the db.
-    return null;
+  public static void getReservations() {
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationManager.printDatabase();
   }
 
   /** @return returns an ArrayList of all currently reserved rooms. */
   public static void getReservedRooms() {
-   ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
-   for (Room room : occupiedRooms){
-    System.out.println(room);
-   }
+    ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
+    for (Room room : occupiedRooms) {
+      System.out.println(room);
+    }
+  }
+/**
+ * uses ReservationDataBase class to search for rooms that need to be checked out
+ * on current date.
+ */
+  public static void getRoomsToCheckOut() {
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    ArrayList<Reservation> roomsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
+    if(roomsThatNeedCheckOut.size() > 0){
+    for (Reservation reservation : roomsThatNeedCheckOut) {
+      System.out.println(reservation);
+    }
+  } else {
+    System.out.println("There are 0 rooms to check out today.");
+  }
   }
 
   /**
    * Generates a text-user-interface with various reports that a Manager might
    * want to view.
    *
-   * @param Scanner object passed from the main method.
+   * @param scnr scanner object passed from the main method.
    */
   private static void generateManagerReport(Scanner scnr) {
     boolean exitFlag = false;
@@ -50,31 +68,30 @@ public class Hotel {
         case 0:
           exitFlag = true;
           break;
-        case 1: // TODO:
+        case 1:
           printAllRooms();
           break;
-        case 2: // TODO:
-          System.out.println("CALL getReservations() TO LOOK UP ALL RESERVATIONS IN DB");
-          // getReservations();
+        case 2: 
+           getReservations();
           break;
-        case 3: // TODO:
-          System.out.println("FIND ROOMS THAT NEED TO BE CHECKED OUT TODAY");
-          //User reservation manager to find rooms that should be checked out TODAY.
-          break;
-        case 4: // TODO:
+        case 3:
+          getRoomsToCheckOut();
+          
+                    break;
+        case 4:
           getReservedRooms();
           break;
         default:
           System.out.println("Invalid input. Please select one of the following options.");
       }
     }
+
   }
 
-  /**
-   * Presents a text user interface for customers.
-   *
-   * @param scanner object passed by main method.
-   */
+/**
+ * Presents a text user interface for customers.
+ * @param scnr scanner object passed in by main.
+ */
   private static void presentUserOptions(Scanner scnr) {
     boolean exitFlag = false;
     while (!exitFlag) {
@@ -111,7 +128,7 @@ public class Hotel {
   /**
    * Presents a text user interface for employee options and manager reports.
    *
-   * @param Scanner object passed by main method.
+   * @param scnr object passed by main method.
    */
   private static void presentEmployeeOptions(Scanner scnr) {
     boolean exitFlag = false;
