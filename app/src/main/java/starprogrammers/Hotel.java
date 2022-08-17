@@ -5,8 +5,10 @@ import java.util.*;
 /**
  * 08/01/2022
  * Juan Vazquez
- * Hotel class serves as the class that allows users and manager/employees to
- * get options on what they can do.
+ * Hotel class serves as the a utility class that presents the user with menus of their possible
+ * options.
+ * ArrayLists are used in this code in order to keep track of the different reservations
+ * or rooms that were read in from the database.
  */
 public class Hotel {
 
