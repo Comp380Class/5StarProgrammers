@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Hotel {
 
-  /** @return returns an ArrayList of all currently available rooms. */
+  /** prints all currently available rooms. */
   public static void printAllRooms() {
     ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
     for (Room room : allRooms) {
@@ -20,13 +20,13 @@ public class Hotel {
     }
   }
 
-  /** @return returns an ArrayList of all current reservations. */
+  /** prints all current reservations. */
   public static void getReservations() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     reservationManager.printDatabase();
   }
 
-  /** @return returns an ArrayList of all currently reserved rooms. */
+  /** prints all currently reserved rooms. */
   public static void getReservedRooms() {
     ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
     for (Room room : occupiedRooms) {
