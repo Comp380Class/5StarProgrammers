@@ -6,15 +6,30 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
+/**
+ * RoomDataBase
+ * 08/11/2022
+ * Juan Vazquez
+ * This class functions as the database manager. It serves to create, read, update, destroy 
+ * entries in the Room table of the database. 
+ * 
+ * Important functions: initializationOfRoomTable() is called by the Hotel main method so the room table always exists.
+ * insertRoom(Room r) inserts a given room into the table.
+ * removeRoomFromTable(int roomNumber) if the given room number belongs to one of the rooms in the table, it is removed from the table.
+ * getSpecifiedRoom(int roomNumber) searches the database table for the given room number, if found returns a room object with the information 
+ * from the table. If not found, returns a null Room object.
+ * 
+ * Important Data Structures: ArrayList used to keep a list of rooms that may be returned to other functions or classes.
+ */
 public class RoomDataBase {
-
+/**
+ * NUMBER_OF_FLOORS reperesents number of floors in the hotel.
+ */
   private static final int NUMBER_OF_FLOORS = 2;
+  /**
+   * ROOMS_PER_FLOOR represents the rooms per floor in the hotel.
+   */
   private static final int ROOMS_PER_FLOOR = 20;
-
-  // Private constructor because class should be accessed statically.
-  private RoomDataBase() {
-  } 
 
   /**
    * Checks if table exists in database, if it does not
@@ -307,7 +322,7 @@ public class RoomDataBase {
    * a null room object.
    * 
    * @param roomNumber integer representing the room number that the customer was
-   *                   previously assigned to.
+   *                   assigned to.
    * @return a null room object or an initialized room object with customer name
    *         and room information.
    */
