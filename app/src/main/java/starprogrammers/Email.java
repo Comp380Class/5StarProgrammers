@@ -3,7 +3,13 @@ package starprogrammers;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-
+/**
+ * 08/12/2022
+ * Erin Maldonado
+ * Email class takes the reservation and room parameters 
+ * and creates an email to be sent to the customer based on 
+ * reservation, cancellation or changes made. 
+ */
 public class Email {
     private static String USER_NAME = "5starprogrammers@gmail.com";
     private static String PASSWORD = "wvalhyiaxohievqu";
@@ -18,9 +24,11 @@ public class Email {
 
     /**
      * Sends the customer an email with booking information
+     * @param String reservation, cancellation or changes 
+     * to reservation
      */
-    public static void sendEmail(String type) {
-        final String RECIPIENT = res.getEmail();
+    public void sendEmail(String type) {
+        final String RECIPIENT = res.getCustomerEmail();
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
         props.put("mail.smtp.host", host);
