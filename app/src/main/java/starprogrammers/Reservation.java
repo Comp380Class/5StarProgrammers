@@ -1,5 +1,15 @@
 package starprogrammers;
 
+/**
+ * 08/01/2022
+ * Erin Maldonado
+ * Reservation class is used to create a reservation object
+ * and stores customer information including: check in and
+ * check out dates, room numbers, total occupants, customer's
+ * name and age.
+ * 
+ */
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.time.Period;
@@ -27,7 +37,8 @@ public class Reservation {
     private Date checkOut;
 
     /** Represents the length of stay */
-    private static Period period;
+    private Period period;
+
 
     /**
      * Constructs a Reservation with customer information.
@@ -61,7 +72,7 @@ public class Reservation {
       this.roomNumber = roomNumber;
       this.checkIn = convertLocalDate(checkIn);
       this.checkOut = convertLocalDate(checkOut);
-      period = Period.between(checkIn, checkOut);
+      this.period = Period.between(checkIn, checkOut);
     }
   
     @Override
@@ -117,6 +128,78 @@ public class Reservation {
       return checkIn;
     }
 
+    public Date getCheckOut(){
+      return checkOut;
+    }
+
+    /**
+     * Gets the customer's first name
+     * @return String
+     */
+    public String getFirstName(){
+      return customerFirstName;
+    }
+
+    /**
+     * Gets customer's last name
+     * @return String
+     */
+    public String getLastName(){
+      return customerLastName;
+    }
+
+    /**
+     * Gets customer's age 
+     * @return int
+     */
+    public int getCustomerAge(){
+      return customerAge;
+    }
+
+    /**
+     * Gets customer payment info
+     * @return String
+     */
+    public String getCustomerPaymentInfo(){
+      return customerPaymentInfo;
+    }
+
+    /**
+     * Gets customer's email
+     * @return String
+     */
+    public String getCustomerEmail(){
+      return customerEmail;
+    }
+
+    /**
+     * Gets total number of occupants
+     * @return int
+     */
+    public int getTotalOccupants(){
+      return totalOccupants;
+    }
+
+    /**
+     * Gets room number
+     * @return int
+     */
+    public int getRoomNumber(){
+      return roomNumber;
+    }
+
+    /**
+     * Gets check in date
+     * @return Date
+     */
+    public Date getCheckIn(){
+      return checkIn;
+    }
+
+    /**
+     * Gets check out date
+     * @return Date
+     */
     public Date getCheckOut(){
       return checkOut;
     }
@@ -205,7 +288,7 @@ public class Reservation {
     * Takes check in and check out to get length of stay
     * @return the total number of days for stay
     */
-    static long totalDays() {
+    public long totalDays() {
       long years = period.getYears();
       long months = period.getMonths();
       long days = period.getDays();
