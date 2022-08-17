@@ -96,42 +96,6 @@ public class Reservation {
         return checkIn.compareTo(checkOut);
     }
 
-    public String getFirstName(){
-      return customerFirstName;
-    }
-
-    public String getLastName(){
-      return customerLastName;
-    }
-
-    public int getCustomerAge(){
-      return customerAge;
-    }
-
-    public String getCustomerPaymentInfo(){
-      return customerPaymentInfo;
-    }
-
-    public String getCustomerEmail(){
-      return customerEmail;
-    }
-
-    public int getTotalOccupants(){
-      return totalOccupants;
-    }
-
-    public int getRoomNumber(){
-      return roomNumber;
-    }
-
-    public Date getCheckIn(){
-      return checkIn;
-    }
-
-    public Date getCheckOut(){
-      return checkOut;
-    }
-
     /**
      * Gets the customer's first name
      * @return String
