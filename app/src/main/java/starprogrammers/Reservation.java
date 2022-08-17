@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.time.Period;
 
 public class Reservation {
+    /** Represents the reservation number */
+    private String reservationId;
     /** Represents customer first name */
     private String customerFirstName;
     /** Represents customer last name */
@@ -36,6 +38,7 @@ public class Reservation {
 
     /** Represents the length of stay */
     private Period period;
+
 
     /**
      * Constructs a Reservation with customer information.
@@ -91,6 +94,42 @@ public class Reservation {
      */
     public int compareDates(){
         return checkIn.compareTo(checkOut);
+    }
+
+    public String getFirstName(){
+      return customerFirstName;
+    }
+
+    public String getLastName(){
+      return customerLastName;
+    }
+
+    public int getCustomerAge(){
+      return customerAge;
+    }
+
+    public String getCustomerPaymentInfo(){
+      return customerPaymentInfo;
+    }
+
+    public String getCustomerEmail(){
+      return customerEmail;
+    }
+
+    public int getTotalOccupants(){
+      return totalOccupants;
+    }
+
+    public int getRoomNumber(){
+      return roomNumber;
+    }
+
+    public Date getCheckIn(){
+      return checkIn;
+    }
+
+    public Date getCheckOut(){
+      return checkOut;
     }
 
     /**

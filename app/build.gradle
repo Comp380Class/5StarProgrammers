@@ -25,6 +25,9 @@ dependencies {
 
     //
     implementation "mysql:mysql-connector-java:8.0.29"
+
+    implementation("com.sun.mail:javax.mail:1.6.2")
+    implementation files('libs/javax.mail.jar')
 }
 
 application {
