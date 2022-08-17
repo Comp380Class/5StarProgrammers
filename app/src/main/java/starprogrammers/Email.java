@@ -3,6 +3,7 @@ package starprogrammers;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
+
 /**
  * 08/12/2022
  * Erin Maldonado
@@ -24,7 +25,7 @@ public class Email {
 
     /**
      * Sends the customer an email with booking information
-     * @param String reservation, cancellation or changes 
+     * @param type reservation, cancellation or changes 
      * to reservation
      */
     public void sendEmail(String type) {
