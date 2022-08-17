@@ -1,5 +1,21 @@
 package starprogrammers;
 
+
+/**
+ * 08/09/2022
+ * Erin Maldonado
+ * ReservationDataBase class is used to create a database,
+ * insert, remove and print from database. 
+ * 
+ * createReservationTable() will create a table, if one does 
+ * not yet exist. Also uses auto_increment feature to create
+ * reservation id for each new reservation. 
+ * 
+ * insertReservation(Reservation r) takes a reservation and 
+ * inputs the reservation to the database. 
+ * 
+ */
+ 
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -7,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class ReservationDataBase {
@@ -299,5 +316,37 @@ public class ReservationDataBase {
       e.printStackTrace();
     }
     return roomsToBeCheckedOut;
+  }
+
+   /**
+   * Uses reservation key to get a specific reservation
+   * @param reservationKey
+   * @return Reservation based on reservationKey
+   */
+  public Reservation getReservation(int reservationKey){
+    String sql = "select * from Reservation";
+    try (Connection conn = MysqlConnector.getConnection();){
+        Statement stmt = conn.prepareStatement(sql);
+        ResultSet rs = stmt.executeQuery(sql);
+        rs.absolute(reservationKey);
+        String lastName = rs.getString(2);
+        String firstName = rs.getString(3);
+        int customerAge = rs.getInt(4);
+        String customerPaymentInfo = rs.getString(5);
+        String customerEmail = rs.getString(6);
+        int totalOccupants = rs.getInt(7);
+        int roomNumber = rs.getInt(8);
+        Date checkInDate = rs.getDate(9);
+        Date checkOutDate = rs.getDate(10);
+        LocalDate checkIn = LocalDate.ofInstant(checkInDate.toInstant(), ZoneId.systemDefault());
+        LocalDate checkOut = LocalDate.ofInstant(checkOutDate.toInstant(), ZoneId.systemDefault());
+        Reservation res = new Reservation(lastName, firstName, 
+        customerAge, customerPaymentInfo, customerEmail, 
+        totalOccupants, roomNumber, checkIn, checkOut);
+        return res;
+    } catch(SQLException e){
+        e.printStackTrace();
+        return null;
+    }
   }
 }
