@@ -2,11 +2,9 @@ package starprogrammers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-//import java.sql.*;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
-//import java.util.Date;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 /**
  * A user is able to access and the necessary functions of the hotel such as
@@ -19,42 +17,28 @@ public class User {
    * and a new reservation is made under the user's name
    */
   public static void bookRoom() {
-    String firstName, lastName, emailAddr, payment;
-    int age, partyNum;
+    String userInput, fullName, firstName, lastName, emailAddr, payment;
+    int age, partyNum, spaceIndex;
     LocalDate checkIn, checkOut;
-
-    Scanner input = new Scanner(System.in);
-    // user inputs check in and check out dates then selects type of room
-
-    // TODO: Create GUI to allow user to input dates and select a type of room
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
 
     // program displays whether room is available, if so prompt user for info(name,
     // age, email address, # of people, payment, check in & out dates)
-    System.out.println("Enter check in date(YYYY MM DD)");
-    int checkInYear = input.nextInt();
-    int checkInMonth = input.nextInt();
-    int checkInDay = input.nextInt();
-    checkIn = LocalDate.of(checkInYear, checkInMonth, checkInDay);
-    System.out.println("Enter check in date(YYYY MM DD)");
-    int checkOutYear = input.nextInt();
-    int checkOutMonth = input.nextInt();
-    int checkOutDay = input.nextInt();
-    checkOut = LocalDate.of(checkOutYear, checkOutMonth, checkOutDay);
-    System.out.println("Enter first name: ");
-    firstName = input.next();
-    System.out.println("Enter last name: ");
-    lastName = input.next();
-    System.out.println("Enter age: ");
-    age = input.nextInt();
-    System.out.println("Enter number of people in party: ");
-    partyNum = input.nextInt();
-    System.out.println("Enter email address: ");
-    emailAddr = input.next();
-    System.out.println("Enter payment info: ");
-    payment = input.next();
-    //
+    userInput = JOptionPane.showInputDialog("Enter check in date(DD/MM/YYYY)");
+    checkIn = LocalDate.parse(userInput, formatter);    
+    userInput = JOptionPane.showInputDialog("Enter check out date(DD/MM/YYYY)");
+    checkOut = LocalDate.parse(userInput, formatter);    
+	  fullName = JOptionPane.showInputDialog("Enter first and last name");
+    spaceIndex = fullName.lastIndexOf(' ');
+    firstName = fullName.substring(0, spaceIndex);
+    lastName = fullName.substring(spaceIndex+1);
+    age = Integer.parseInt(JOptionPane.showInputDialog("Enter age"));
+    partyNum = Integer.parseInt(JOptionPane.showInputDialog("Enter number of people in party"));
+    emailAddr = JOptionPane.showInputDialog("Enter email address");
+    payment= JOptionPane.showInputDialog("Enter payment information");
+    
     String searchFilter = searchForRoomType();
-    int roomNumber = selectRoom(input, searchFilter);
+    int roomNumber = selectRoom(searchFilter);
     Reservation newReservation = new Reservation(lastName, firstName, age, payment, emailAddr, partyNum, roomNumber,
         checkIn, checkOut);
     System.out.println(newReservation); // Instead of print, send to the class that send the reservation to the DB.
@@ -70,13 +54,20 @@ public class User {
    * @return integer value corresponding to the room number that the customer
    *         wants to stay in.
    */
-  public static int displayFilteredRooms(Scanner input, ArrayList<Room> filteredRooms) {
-    for (Room room : filteredRooms) {
-      System.out.println(room);
+  public static int displayFilteredRooms(ArrayList<Room> filteredRooms) {
+    int roomNumberSelected;
+    String roomSelected;
+    String first;
+    Object choice;
+    Object[] options = new Object[filteredRooms.size()];
+    for (int i = 0; i < filteredRooms.size(); i++) {
+      options[i] = filteredRooms.get(i).toString();
     }
-    int roomNumberSelected = input.nextInt();
+    first = (String) options[0];
+    choice = JOptionPane.showInputDialog(null, "Please select the room you would like to book:", "Book Room", JOptionPane.QUESTION_MESSAGE, null, options, first);
+    roomSelected = String.valueOf(choice);
+    roomNumberSelected = Integer.parseInt( roomSelected.substring(13, 16));
     return verifyRoomSelection(roomNumberSelected, filteredRooms);
-
   }
 
   /**
@@ -107,12 +98,13 @@ public class User {
    *                     apply to his search.
    * @return integer representing the room number the user chose.
    */
-  private static int selectRoom(Scanner input, String searchFilter) {
+  private static int selectRoom(String searchFilter) {
+    Scanner removeThis = new Scanner(System.in);
     ArrayList<Room> filteredRooms = RoomDataBase.filterRooms(searchFilter);
     int roomNumber = 0;
     System.out.println("Select your preferred room by entering the room number");
     while (roomNumber == 0) {
-      roomNumber = displayFilteredRooms(input, filteredRooms);
+      roomNumber = displayFilteredRooms(filteredRooms);
       if (roomNumber == 1) {
         System.out.println("Invalid selection. Please select one of the following: ");
         roomNumber = 0;
@@ -131,13 +123,12 @@ public class User {
    */
   static String searchForRoomType() {
     String roomType;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter type of room: Regular, Smoking, or Suite");
-    roomType = "";
-    while (roomType.equals("")) {
-      roomType = input.next();
-      roomType = RoomDataBase.convertStringFilterToSQL(roomType);
-    }
+    String first = "Regular";
+    Object choice;
+    Object[] options = {"Regular" , "Smoking" , "Suite"};
+    choice = JOptionPane.showInputDialog(null, "Please select your preferred type of room:", "Room Selection", JOptionPane.QUESTION_MESSAGE, null, options, first);
+    roomType = String.valueOf(choice);
+    roomType = RoomDataBase.convertStringFilterToSQL(roomType);
     return roomType;
   }
 
@@ -148,13 +139,11 @@ public class User {
   static void cancelReservation() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     int reservationKey;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter your reservation number: ");
-    reservationKey = input.nextInt();
+    reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
     if (reservationManager.doesReservationExist(reservationKey)) {
       reservationManager.cancelReservation(reservationKey);
     } else {
-      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -163,14 +152,10 @@ public class User {
    * then they are given the option to request a different type of room
    */
   static void changeReservation() {
-    String name, newRoom;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
-    System.out.print("Enter type of room you would like your new room to be: ");
-    newRoom = input.next();
-
-    // TODO: implement access to database
+    int rsrvnNum;
+    ReservationDataBase resMngr = new ReservationDataBase();
+    rsrvnNum = Integer.parseInt(JOptionPane.showInputDialog("Enter reservation number"));
+    resMngr.cancelReservation(rsrvnNum);
   }
 
   /**
@@ -180,20 +165,17 @@ public class User {
   static void viewReservation() {
     int reservationKey;
     String userLastName;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter your reservation number: ");
-    reservationKey = input.nextInt();
-    System.out.println("Enter your last name: ");
-    userLastName = input.next();
+    reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
+    userLastName = JOptionPane.showInputDialog("Enter your last name:");
     Reservation userReservation = ReservationDataBase.getSpecificReservation(reservationKey);
     if (userReservation != null) {
       if (userReservation.getLastName().equals(userLastName)) {
-        System.out.println(userReservation);
+        JOptionPane.showMessageDialog(null, userReservation, "Reservation", JOptionPane.PLAIN_MESSAGE);
       } else {
-        System.out.println("Incorrect information. Please try again.");
+        JOptionPane.showMessageDialog(null, "Incorrect information. Please try again.", "Error", JOptionPane.PLAIN_MESSAGE);
       }
     } else {
-      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Error", JOptionPane.PLAIN_MESSAGE);
     }
   }
 }
