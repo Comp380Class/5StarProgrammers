@@ -41,7 +41,9 @@ public class User {
     int roomNumber = selectRoom(searchFilter);
     Reservation newReservation = new Reservation(lastName, firstName, age, payment, emailAddr, partyNum, roomNumber,
         checkIn, checkOut);
-    System.out.println(newReservation); // Instead of print, send to the class that send the reservation to the DB.
+    
+    ReservationDataBase.insertReservation(newReservation);
+    Email.sendEmail("reserve");
     // if all prompts successfully completed, create new reservation and email
     // confirmation to user
   }
@@ -50,7 +52,6 @@ public class User {
    * selectRoom presents the user with the rooms available for renting. The user
    * picks their preferred room by entering its room number.
    *
-   * @param Scanner object passed by bookRoom method.
    * @return integer value corresponding to the room number that the customer
    *         wants to stay in.
    */
@@ -93,23 +94,14 @@ public class User {
 
   /**
    * 
-   * @param input        scanner object passed in by the bookRoom method.
    * @param searchFilter String representing the filter the user would like to
    *                     apply to his search.
    * @return integer representing the room number the user chose.
    */
   private static int selectRoom(String searchFilter) {
-    Scanner removeThis = new Scanner(System.in);
     ArrayList<Room> filteredRooms = RoomDataBase.filterRooms(searchFilter);
     int roomNumber = 0;
-    System.out.println("Select your preferred room by entering the room number");
-    while (roomNumber == 0) {
-      roomNumber = displayFilteredRooms(filteredRooms);
-      if (roomNumber == 1) {
-        System.out.println("Invalid selection. Please select one of the following: ");
-        roomNumber = 0;
-      }
-    }
+    roomNumber = displayFilteredRooms(filteredRooms);
     return roomNumber;
   }
 
@@ -152,10 +144,18 @@ public class User {
    * then they are given the option to request a different type of room
    */
   static void changeReservation() {
-    int rsrvnNum;
-    ReservationDataBase resMngr = new ReservationDataBase();
-    rsrvnNum = Integer.parseInt(JOptionPane.showInputDialog("Enter reservation number"));
-    resMngr.cancelReservation(rsrvnNum);
+    int reservationNum, newRoomNum;
+    Reservation res;
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
+    if(reservationManager.doesReservationExist(reservationNum)){
+      res = reservationManager.getSpecificReservation(reservationNum);
+      newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
+      reservationManager.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
+    }
+    else{
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
+    }
   }
 
   /**
@@ -165,9 +165,10 @@ public class User {
   static void viewReservation() {
     int reservationKey;
     String userLastName;
+    ReservationDataBase reservationManager = new ReservationDataBase();
     reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
     userLastName = JOptionPane.showInputDialog("Enter your last name:");
-    Reservation userReservation = ReservationDataBase.getSpecificReservation(reservationKey);
+    Reservation userReservation = reservationManager.getSpecificReservation(reservationKey);
     if (userReservation != null) {
       if (userReservation.getLastName().equals(userLastName)) {
         JOptionPane.showMessageDialog(null, userReservation, "Reservation", JOptionPane.PLAIN_MESSAGE);
@@ -187,12 +188,17 @@ class Manager extends User {
    * replace current room
    */
   static void changeRoomReservation() {
-    String name;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
-
-    // TODO: implement access to database
+    int reservationNum, newRoomNum;
+    Reservation res;
+    reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
+    if(ReservationDataBase.doesReservationExist(reservationNum)){
+      res = ReservationDataBase.getSpecificReservation(reservationNum);
+      newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
+      ReservationDataBase.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
+    }
+    else{
+      JOptionPane.showMessageDialog(null, "Cannot find reservation in the hotel database!", "Error", JOptionPane.PLAIN_MESSAGE);
+    }
   }
 
   /**
@@ -202,9 +208,7 @@ class Manager extends User {
   static void cancelRoomReservation() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     int reservationKey;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter customer's reservation number: ");
-    reservationKey = input.nextInt();
+    reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
     if (reservationManager.doesReservationExist(reservationKey)) {
       reservationManager.cancelReservation(reservationKey);
     } else {
@@ -213,15 +217,21 @@ class Manager extends User {
   }
 
   /**
-   * user selects reservation (or booked room?) and change occupied(or checked-in
-   * flag?) to true
+   * user enters reservation number, database containing info for the room in the 
+   * reservation updates the name for the room with the name from the reservation
    */
   static void checkCustomerIn() {
-    String name;
-    Scanner input = new Scanner(System.in);
-    System.out.print("Enter name: ");
-    name = input.next();
+    int reservationKey, resRoomNum;
+    Reservation res;
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
+    if (reservationManager.doesReservationExist(reservationKey)) {
+      res = reservationManager.getSpecificReservation(reservationKey);
+      resRoomNum = res.getRoomNumber();
+      // TODO: change name in room to name in reservation
+    } else {
+      System.out.println("Reservation does not exist. Please try again or contact customer service.");
+    }
 
-    // TODO: implement access to database
   }
 }
