@@ -24,6 +24,21 @@ public class RequestChangeRoom {
         ChangeRoom = ChangeRoom.observableArrayList();
     }
 
+    public RequestChangeRoom(String name,int roomNumber) {
+        this.name = name;
+        this.roomNumber = roomNumber;
+    }
+    public int roomNumber(){
+        return roomNumber;
+    }
+    
+    public void writeTo(PrintWriter output) {
+        output.print(name); //print name for request to change
+        output.print(" ");
+        output.print(roomNumber); //print room number for request to change a new room
+        output.print(" "); 
+    }
+    
     /**
      * will return name once request to change a room
      * @return return name to fill it up for request
@@ -57,12 +72,12 @@ public class RequestChangeRoom {
         ChangeRoom.sort(ChangeRoom);
     }
 
-    /**
-     * to processing of able approve the request to change the room
-     * @param toRemove return to remove from previous room to able change to a new one
-     */
-    public void removeReservation(Request toRemove) {
-        ChangeRoom.remove(toRemove);
+     /**
+      * to processing of able approve the request to change the room
+      *return to change from previous room to able change to a new one
+      */
+    public void changeReservation(Request toChange) {
+        ChangeRoom.change(toChange);
     }
 
     /**
@@ -97,5 +112,6 @@ public class RequestChangeRoom {
      * @return representing the room that the customer wanted to change
      */
     public ObservableList<Request> getChangeRoom() {
-        return ChangeRoom; }
+        return ChangeRoom; 
+    }
 }
