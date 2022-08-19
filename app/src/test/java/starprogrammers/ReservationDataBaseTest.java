@@ -19,11 +19,11 @@ public class ReservationDataBaseTest {
     @Test
     void testCancelReservation() {
         resdb.cancelReservation(5);
-        assertEquals(null, resdb.getReservation(5), "must be null");
+        assertEquals(null, ReservationDataBase.getSpecificReservation(5), "must be null");
     }
     
     @Test
     void getReservation(){
-        assertEquals(res, resdb.getReservation(10), "must be john smith's reservation");
+        assertEquals(res.getName(), ReservationDataBase.getSpecificReservation(10).getName(), "must be john smith's reservation");
     }
 }

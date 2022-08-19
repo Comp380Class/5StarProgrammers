@@ -38,7 +38,7 @@ public class ReservationTest {
 
     @Test
     void testGetCustomerPaymentInfo() {
-        assertEquals("123546489", res.getCustomerEmail(), "must be 123546489");
+        assertEquals("123546489", res.getCustomerPaymentInfo(), "must be 123546489");
     }
 
     @Test
@@ -68,11 +68,11 @@ public class ReservationTest {
 
     @Test
     void testTotalDays() {
-        assertEquals(3, res.totalDays(), "must be 3");
+        assertEquals(2, res.totalDays(), "must be 2");
     }
 
     @Test
     void testTotalPrice() {
-        assertEquals(2, res.totalPrice(room), "must be 2");
+        assertEquals(100, res.totalPrice(room), "must be 100");
     }
 }

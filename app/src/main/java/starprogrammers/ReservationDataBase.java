@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class ReservationDataBase {
@@ -252,7 +251,7 @@ public class ReservationDataBase {
    */
   public static Reservation getSpecificReservation(int reservationID) {
     String sql = String.format(
-        "SELECT id, first_name, last_name, payment_info, email, "
+        "SELECT reservation_key, first_name, last_name, payment_info, email, "
             + "age, total_occupants, room_number, check_in, check_out FROM Reservation WHERE reservation_key = %d",
         reservationID);
     Reservation specifiedReservation = null;
@@ -316,37 +315,5 @@ public class ReservationDataBase {
       e.printStackTrace();
     }
     return roomsToBeCheckedOut;
-  }
-
-   /**
-   * Uses reservation key to get a specific reservation
-   * @param reservationKey
-   * @return Reservation based on reservationKey
-   */
-  public Reservation getReservation(int reservationKey){
-    String sql = "select * from Reservation";
-    try (Connection conn = MysqlConnector.getConnection();){
-        Statement stmt = conn.prepareStatement(sql);
-        ResultSet rs = stmt.executeQuery(sql);
-        rs.absolute(reservationKey);
-        String lastName = rs.getString(2);
-        String firstName = rs.getString(3);
-        int customerAge = rs.getInt(4);
-        String customerPaymentInfo = rs.getString(5);
-        String customerEmail = rs.getString(6);
-        int totalOccupants = rs.getInt(7);
-        int roomNumber = rs.getInt(8);
-        Date checkInDate = rs.getDate(9);
-        Date checkOutDate = rs.getDate(10);
-        LocalDate checkIn = LocalDate.ofInstant(checkInDate.toInstant(), ZoneId.systemDefault());
-        LocalDate checkOut = LocalDate.ofInstant(checkOutDate.toInstant(), ZoneId.systemDefault());
-        Reservation res = new Reservation(lastName, firstName, 
-        customerAge, customerPaymentInfo, customerEmail, 
-        totalOccupants, roomNumber, checkIn, checkOut);
-        return res;
-    } catch(SQLException e){
-        e.printStackTrace();
-        return null;
-    }
   }
 }

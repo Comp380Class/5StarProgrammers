@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 public class EmailTest {
     Reservation res = new Reservation("Smith", "John",
     65, "123546489", 
-    "johnsmith@gmail.com", 2, 206, 
+    "5starprogrammers@gmail.com", 2, 206, 
     LocalDate.of(2022, 12, 1), 
     LocalDate.of(2022, 12, 3));
     Room room = new Room("Smith", "John", 206,
@@ -17,7 +17,17 @@ public class EmailTest {
     Email email = new Email(res, room);
     
     @Test
-    void testSendEmail() {
-        assertTrue(email.sendEmail("reserve"), "should send email without error");
+    void testReserve() {
+        assertTrue(email.sendEmail("reserve"), "should send reservation email without error");
+    }
+
+    @Test
+    void testCancelReservation() {
+        assertTrue(email.sendEmail("cancel"), "should send cancellation email without error");
+    }
+
+    @Test
+    void testChangeReservation() {
+        assertTrue(email.sendEmail("change"), "should send changes email without error");
     }
 }
