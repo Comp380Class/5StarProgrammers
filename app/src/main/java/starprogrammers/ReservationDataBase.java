@@ -252,7 +252,7 @@ public class ReservationDataBase {
    */
   public static Reservation getSpecificReservation(int reservationID) {
     String sql = String.format(
-        "SELECT id, first_name, last_name, payment_info, email, "
+        "SELECT reservation_key, first_name, last_name, payment_info, email, "
             + "age, total_occupants, room_number, check_in, check_out FROM Reservation WHERE reservation_key = %d",
         reservationID);
     Reservation specifiedReservation = null;
