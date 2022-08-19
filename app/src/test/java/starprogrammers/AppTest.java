@@ -6,19 +6,14 @@ package starprogrammers;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
+
 class AppTest {
-    @Test void mysqlConnects() {
-        String url1 = "jdbc:mysql://sql3.freesqldatabase.com/sql3507015";
-        String user = "sql3507015";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertTrue(classUnderTest.connect(), "app should have a connection");
+    @Test void mysqlConnects() throws SQLException {
+        assertEquals(MysqlConnector.getConnection(), "app should have a connection");
     }
-     @Test void mysqlFailConnect() {
-        String url1 = "null";
-        String user = "null";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertFalse(classUnderTest.connect(), "app should fail if credentials/url incorrect.");
+
+    @Test void mysqlFailsConnection(){
+        assertEquals(null, "app failed to connect");
     }
 }
