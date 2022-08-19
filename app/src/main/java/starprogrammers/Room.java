@@ -100,6 +100,12 @@ public class Room implements Comparable<Room> {
   public int getBedQuantity() {
     return bedQuantity;
   }
+  public void setFirstName(String firstName){
+    this.firstName = firstName;
+  }
+  public void setLastName(String lastName){
+    this.lastName = lastName;
+  }
 
   /**
    * To scan the input to able to get the more details after selecting the room
@@ -138,8 +144,8 @@ public class Room implements Comparable<Room> {
   }
 
   public String toString() {
-    return "Room Number: " + roomNumber + " " + "Number of occupants allowed: " + numberOfOccupants + " Room Type: "
-        + roomType + " Bed Type: " + bedType; // this is where if the user want to book for that specific room
+    return "Room Number: " + roomNumber + " | Room Type: "
+        + roomType + " | Bed Type: " + bedType; // this is where if the user want to book for that specific room
   }
 
   @Override

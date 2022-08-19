@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 /**
  * RoomDataBase
  * 08/11/2022
@@ -345,5 +347,20 @@ public class RoomDataBase {
       e.printStackTrace();
     }
     return specifiedRoom;
+  }
+  public static void checkCustomerIntoRoom(Room customerRoom) {
+    String output;
+    String sql = "UPDATE Room SET first_name = ?, last_name = ?  WHERE room_number = ?";
+    try (Connection conn = MysqlConnector.getConnection();) {
+      PreparedStatement pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, customerRoom.getFirstName());
+      pstmt.setString(2, customerRoom.getLastName());
+      pstmt.setInt(3, customerRoom.getRoomNumber());
+      pstmt.executeUpdate();
+      output =  customerRoom.getLastName() + " " + customerRoom.getFirstName() + " has been checked into room " + customerRoom.getRoomNumber();
+      JOptionPane.showMessageDialog(null, output, "Customer has been checked into their room", JOptionPane.PLAIN_MESSAGE);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 }

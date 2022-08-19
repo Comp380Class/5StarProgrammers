@@ -25,7 +25,7 @@ class AppTest {
 
   @BeforeAll
   static void setUpRoom() {
-    testRoom = new Room("Test", "Test", 1, "Suite", "Queen", 1, 1, 1);
+    testRoom = new Room("Test", "Room", 1, "Suite", "Queen", 1, 1, 1);
   }
 
   @Test
