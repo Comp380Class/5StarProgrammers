@@ -10,27 +10,29 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+
 class AppTest {
-    @Test void mysqlConnects() throws SQLException {
-        assertEquals(MysqlConnector.getConnection(), "app should have a connection");
-    }
+  @Test
+  void mysqlConnects() throws SQLException {
+    assertNotNull(MysqlConnector.getConnection());
+  }
 
-    @Test void mysqlFailsConnection(){
-        assertEquals(null, "app failed to connect");
-    }
+  static Room testRoom;
 
- static Room testRoom;
- 
   @BeforeAll
   static void setUpRoom() {
     testRoom = new Room("Test", "Test", 1, "Suite", "Queen", 1, 1, 1);
   }
-  @Test void mySqlConnectorConnects() throws SQLException{
+
+  @Test
+  void mySqlConnectorConnects() throws SQLException {
     assertNotNull(MysqlConnector.getConnection());
   }
+
   @Test
   void RoomManagerInsertsToTable() {
     RoomDataBase.insertRoom(testRoom);
