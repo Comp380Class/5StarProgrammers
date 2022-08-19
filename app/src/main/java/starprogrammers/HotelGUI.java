@@ -528,7 +528,7 @@ public class HotelGUI extends javax.swing.JFrame {
      * @param OpenHotelMenu(
      */
     private void reportShowRoomsToCheckoutButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reportShowRoomsToCheckoutButtonMouseClicked
-        Hotel.getRoomsToCheckOut();
+        Hotel.getReservationsToCheckOut();
     }//GEN-LAST:event_reportShowRoomsToCheckoutButtonMouseClicked
 
     

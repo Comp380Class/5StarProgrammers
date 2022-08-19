@@ -3,22 +3,63 @@
  */
 package starprogrammers;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import java.util.ArrayList;
+
 class AppTest {
-    @Test void mysqlConnects() {
-        String url1 = "jdbc:mysql://sql3.freesqldatabase.com/sql3507015";
-        String user = "sql3507015";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertTrue(classUnderTest.connect(), "app should have a connection");
-    }
-     @Test void mysqlFailConnect() {
-        String url1 = "null";
-        String user = "null";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertFalse(classUnderTest.connect(), "app should fail if credentials/url incorrect.");
-    }
+  @Test
+  void mysqlConnects() throws SQLException {
+    assertNotNull(MysqlConnector.getConnection());
+  }
+
+  static Room testRoom;
+
+  @BeforeAll
+  static void setUpRoom() {
+    testRoom = new Room("Test", "Test", 1, "Suite", "Queen", 1, 1, 1);
+  }
+
+  @Test
+  void mySqlConnectorConnects() throws SQLException {
+    assertNotNull(MysqlConnector.getConnection());
+  }
+
+  @Test
+  void RoomManagerInsertsToTable() {
+    RoomDataBase.insertRoom(testRoom);
+    assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()), "Room 001 should exist after being inserted.");
+  }
+
+  @Test
+  void RoomManagerCreatesRoom() {
+    RoomDataBase.insertRoom(testRoom);
+    assertNotNull(RoomDataBase.getSpecifiedRoom(testRoom.getRoomNumber()));
+  }
+
+  @Test
+  void RoomManagerDeletesFromTable() {
+    assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
+    RoomDataBase.removeRoomFromTable(testRoom.getRoomNumber());
+    assertFalse(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
+  }
+
+  public static ArrayList<Room> filterRooms() {
+    ArrayList<Room> testRooms = RoomDataBase.filterRooms("Suite");
+    return testRooms;
+  }
+
+  @ParameterizedTest
+  @MethodSource(value = "filterRooms")
+  void testRoomFilter(Room filteredRoom) {
+    assertEquals("Suite", filteredRoom.getRoomType());
+  }
 }

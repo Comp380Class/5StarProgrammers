@@ -3,47 +3,57 @@ package starprogrammers;
 import java.util.*;
 import javax.swing.JOptionPane;
 
-public class Hotel {
 /**
- * Hotel class serves as the class that allows users and manager/employees to get options on
- * what they can do.
+ * 08/01/2022
+ * Juan Vazquez
+ * Hotel class serves as the a utility class that presents the user with menus
+ * of their possible
+ * options.
+ * ArrayLists are used in this code in order to keep track of the different
+ * reservations
+ * or rooms that were read in from the database.
  */
-  private Hotel() {
-  }
+public class Hotel {
 
-  /** @return returns an ArrayList of all currently available rooms. */
+  /** prints all currently available rooms. */
   public static void printAllRooms() {
     ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
     String output = "";
-    for(int i = 0; i < allRooms.size(); i++){
+    for (int i = 0; i < allRooms.size(); i++) {
       output += allRooms.get(i);
       output += "\n";
     }
     JOptionPane.showMessageDialog(null, output, "All Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
   }
 
-  /** @return returns an ArrayList of all current reservations. */
+  /** prints all current reservations. */
   public static void getReservations() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     reservationManager.printDatabase();
   }
 
-  /** @return returns an ArrayList of all currently reserved rooms. */
+  /** prints all currently reserved rooms. */
   public static void getReservedRooms() {
     ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
-    JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Reserved Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
+    JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Reserved Rooms In Hotel",
+        JOptionPane.PLAIN_MESSAGE);
   }
-/**
- * uses ReservationDataBase class to search for rooms that need to be checked out
- * on current date.
- */
-  public static void getRoomsToCheckOut() {
+
+  /**
+   * uses ReservationDataBase class to search for reservations/rooms that need to
+   * be checked
+   * out on current date. If more than 0 reservations are returned, they are
+   * printed to screen.
+   */
+  public static void getReservationsToCheckOut() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     ArrayList<Reservation> roomsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
-    if(roomsThatNeedCheckOut.size() > 0){
-      JOptionPane.showMessageDialog(null, roomsThatNeedCheckOut, "Rooms That Need To Be Checked-out", JOptionPane.PLAIN_MESSAGE);
+    if (roomsThatNeedCheckOut.size() > 0) {
+      JOptionPane.showMessageDialog(null, roomsThatNeedCheckOut, "Rooms That Need To Be Checked-out",
+          JOptionPane.PLAIN_MESSAGE);
     } else {
-      JOptionPane.showMessageDialog(null, "Currently there are no rooms that need to be checked-out.", "No Rooms to Check-out", JOptionPane.PLAIN_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Currently there are no rooms that need to be checked-out.",
+          "No Rooms to Check-out", JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -60,9 +70,8 @@ public class Hotel {
       System.out.println("0) Back");
       System.out.println("1) All available rooms");
       System.out.println("2) All current reservations.");
-      System.out.println(
-          "3) All Rooms that need to be Checked-Out."); // Room XXX needs to check out.
-      System.out.println("4) All reserved rooms"); // Room reserved by X from checkIn to Checkout.
+      System.out.println("3) All Reservations that need to be Checked-Out.");
+      System.out.println("4) All reserved rooms");
       int userInput = scnr.nextInt();
       switch (userInput) {
         case 0:
@@ -71,13 +80,13 @@ public class Hotel {
         case 1:
           printAllRooms();
           break;
-        case 2: 
-           getReservations();
+        case 2:
+          getReservations();
           break;
         case 3:
-          getRoomsToCheckOut();
-          
-                    break;
+          getReservationsToCheckOut();
+
+          break;
         case 4:
           getReservedRooms();
           break;
@@ -88,10 +97,11 @@ public class Hotel {
 
   }
 
-/**
- * Presents a text user interface for customers.
- * @param scnr scanner object passed in by main.
- */
+  /**
+   * Presents a text user interface for customers.
+   * 
+   * @param scnr scanner object passed in by main.
+   */
   private static void presentUserOptions(Scanner scnr) {
     boolean exitFlag = false;
     while (!exitFlag) {
@@ -163,11 +173,6 @@ public class Hotel {
     }
   }
 
-  /**
-   * Generates a text-user-interface with 2 options to select the user-type and 1
-   * option to * quit
-   * the program.
-   */
   public static void main(String[] args) {
     RoomDataBase.initializationOfRoomTable();
     HotelGUI.OpenHotelMenu();
