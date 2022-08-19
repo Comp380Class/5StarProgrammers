@@ -1,6 +1,7 @@
 package starprogrammers;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class Hotel {
 /**
@@ -13,9 +14,12 @@ public class Hotel {
   /** @return returns an ArrayList of all currently available rooms. */
   public static void printAllRooms() {
     ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
-    for (Room room : allRooms) {
-      System.out.println(room);
+    String output = "";
+    for(int i = 0; i < allRooms.size(); i++){
+      output += allRooms.get(i);
+      output += "\n";
     }
+    JOptionPane.showMessageDialog(null, output, "All Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
   }
 
   /** @return returns an ArrayList of all current reservations. */
@@ -27,9 +31,7 @@ public class Hotel {
   /** @return returns an ArrayList of all currently reserved rooms. */
   public static void getReservedRooms() {
     ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
-    for (Room room : occupiedRooms) {
-      System.out.println(room);
-    }
+    JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Reserved Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
   }
 /**
  * uses ReservationDataBase class to search for rooms that need to be checked out
@@ -39,12 +41,10 @@ public class Hotel {
     ReservationDataBase reservationManager = new ReservationDataBase();
     ArrayList<Reservation> roomsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
     if(roomsThatNeedCheckOut.size() > 0){
-    for (Reservation reservation : roomsThatNeedCheckOut) {
-      System.out.println(reservation);
+      JOptionPane.showMessageDialog(null, roomsThatNeedCheckOut, "Rooms That Need To Be Checked-out", JOptionPane.PLAIN_MESSAGE);
+    } else {
+      JOptionPane.showMessageDialog(null, "Currently there are no rooms that need to be checked-out.", "No Rooms to Check-out", JOptionPane.PLAIN_MESSAGE);
     }
-  } else {
-    System.out.println("There are 0 rooms to check out today.");
-  }
   }
 
   /**
@@ -170,28 +170,6 @@ public class Hotel {
    */
   public static void main(String[] args) {
     RoomDataBase.initializationOfRoomTable();
-    Scanner scnr = new Scanner(System.in);
-    boolean exitFlag = false;
-    while (!exitFlag) {
-      System.out.println("");
-      System.out.println("0) Quit");
-      System.out.println("1) Log in as user");
-      System.out.println("3) Log in as employee");
-      int userInput = scnr.nextInt();
-      switch (userInput) {
-        case 0:
-          exitFlag = true;
-          break;
-        case 1:
-          presentUserOptions(scnr);
-          break;
-        case 3:
-          presentEmployeeOptions(scnr);
-          break;
-        default:
-          System.out.println("\nInvalid input. Please try one of the following options.");
-          break;
-      }
-    }
+    HotelGUI.OpenHotelMenu();
   }
 }
