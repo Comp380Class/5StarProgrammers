@@ -53,7 +53,7 @@ public class Email {
             // email will vary based on cancellation, reservation, or changes
             switch(type){
                 case "reserve":
-                message.setSubject("Reservation for " + res.getName() + " Confirmation# : " + reservationKey); 
+                message.setSubject("Reservation for " + res.getName() + " | Confirmation# : " + reservationKey); 
                 message.setText(res.confirmationEmail(room)); break;
                 case "cancel":
                 message.setSubject("Cancellation for " + res.getName()); 

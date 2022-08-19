@@ -1,4 +1,4 @@
-package starprogrammers;
+ package starprogrammers;
 
 /**
  * 08/09/2022
@@ -23,7 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.sql.*;
+import javax.swing.JOptionPane;
 
 public class ReservationDataBase {
   ReservationDataBase() {
@@ -86,7 +86,7 @@ public class ReservationDataBase {
    * @param firstName user's first name
    * @param lastName  user's last name
    */
-  private boolean doesRowExist(String firstName, String LastName) {
+  private static boolean doesRowExist(String firstName, String LastName) {
     String sql = "SELECT first_name FROM Reservation WHERE first_name = ? AND last_name = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -94,7 +94,7 @@ public class ReservationDataBase {
       pstmt.setString(2, LastName);
       ResultSet rs = pstmt.executeQuery();
       if (rs.next()) {
-        System.out.println("Already exists in database");
+        JOptionPane.showMessageDialog(null, "The reservation has already been made.", "Error: Duplicate Reservation", JOptionPane.PLAIN_MESSAGE);
         return true;
       }
     } catch (SQLException e) {
@@ -108,6 +108,7 @@ public class ReservationDataBase {
    * 
    * @param r Reservation object.
    */
+
   public int insertReservation(Reservation r) {
     int reservationKey = -1;
     if (!doesRowExist(r.getFirstName(), r.getLastName())) {
@@ -125,8 +126,8 @@ public class ReservationDataBase {
         pstmt.setInt(7, r.getRoomNumber());
         pstmt.setDate(8, r.getCheckIn());
         pstmt.setDate(9, r.getCheckOut());
-
-       pstmt.executeUpdate();
+        pstmt.executeUpdate();
+        JOptionPane.showMessageDialog(null, "The Reservation was made sucessfully! Please check your email for confirmation", "Reservation Made", JOptionPane.PLAIN_MESSAGE);
         System.out.println("Inserted records into the table...");
       ResultSet generatedKeys = pstmt.getGeneratedKeys();
       generatedKeys.next();
@@ -143,24 +144,27 @@ public class ReservationDataBase {
    * Prints all data in reservation table
    */
   public void printDatabase() {
+    String line, output;
     String sql1 = "SELECT reservation_key, first_name, last_name, payment_info, email, "
         + "total_occupants, room_number, check_in, check_out FROM Reservation";
     try (Connection conn = MysqlConnector.getConnection();) {
       Statement stmt = conn.createStatement();
       ResultSet resultSet = stmt.executeQuery(sql1);
-      System.out.println("ID\tLast First\tPayment Info\tEmail\t\t\t# Occupants\tRoom #\tCheck In\tCheck Out");
+      output = "ID   \tLast First   \tPayment Info   \tEmail   \t   \t   \t# Occupants   \tRoom #   \tCheck In   \tCheck Out\n";
       while (resultSet.next()) {
-        System.out.println(
-            resultSet.getString("reservation_key") + "\t" +
+        //System.out.println(
+        line = resultSet.getString("reservation_key") + "   \t" +
                 resultSet.getString("last_name") + " " +
-                resultSet.getString("first_name") + "\t" +
-                resultSet.getString("payment_info") + "\t" +
-                resultSet.getString("email") + "\t\t" +
-                resultSet.getInt("total_occupants") + "\t\t" +
-                resultSet.getInt("room_number") + "\t" +
-                resultSet.getDate("check_in") + "\t" +
-                resultSet.getDate("check_out"));
+                resultSet.getString("first_name") + "   \t" +
+                resultSet.getString("payment_info") + "   \t" +
+                resultSet.getString("email") + "  \t  \t" +
+                resultSet.getInt("total_occupants") + "   \t  \t" +
+                resultSet.getInt("room_number") + "   \t" +
+                resultSet.getDate("check_in") + "   \t" +
+                resultSet.getDate("check_out");
+        output += line + "\n";    
       }
+      JOptionPane.showMessageDialog(null, output, "All Reservations in Hotel Database", JOptionPane.PLAIN_MESSAGE);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -174,14 +178,15 @@ public class ReservationDataBase {
    * @param roomNumber
    */
   public void modifyCheckIn(Date currentDate, Date newDate, int roomNumber) {
+    String output;
     String sql1 = "UPDATE Reservation SET check_in = ? WHERE room_number = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql1);
       pstmt.setDate(1, newDate);
       pstmt.setInt(2, roomNumber);
       pstmt.executeUpdate();
-      System.out.println("Check in updated from " + currentDate + " to " +
-          newDate + " successfully");
+      output = "Check in updated from " + currentDate + " to " + newDate + " successfully";
+      JOptionPane.showMessageDialog(null, output, "Check-out Date Updated", JOptionPane.PLAIN_MESSAGE);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -195,14 +200,15 @@ public class ReservationDataBase {
    * @param roomNumber
    */
   public void modifyCheckOut(Date currentDate, Date newDate, int roomNumber) {
+    String output;
     String sql = "UPDATE Reservation SET check_out = ? WHERE room_number = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
       pstmt.setDate(1, newDate);
       pstmt.setInt(2, roomNumber);
       pstmt.executeUpdate();
-      System.out.println("Check out updated from " + currentDate + " to " +
-          newDate + " successfully");
+      output = "Check out updated from " + currentDate + " to " + newDate + " successfully";
+      JOptionPane.showMessageDialog(null, output, "Check-out Date Updated", JOptionPane.PLAIN_MESSAGE);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -215,14 +221,15 @@ public class ReservationDataBase {
    * @param newRoom
    */
   public void modifyRoomNumber(int currentRoom, int newRoom) {
+    String output;
     String sql = "UPDATE Reservation SET room_number = ? WHERE room_number = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, newRoom);
       pstmt.setInt(2, currentRoom);
       pstmt.executeUpdate();
-      System.out.println("Room number updated from " + currentRoom + " to " +
-          newRoom + " successfully");
+      output = "Room number updated from " + currentRoom + " to " + newRoom + " successfully";
+      JOptionPane.showMessageDialog(null, output, "Room Number Updated", JOptionPane.PLAIN_MESSAGE);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -231,7 +238,7 @@ public class ReservationDataBase {
   /**
    * Removes reservation from database
    */
-  public void cancelReservation(int reservationNumber) {
+  public static void cancelReservation(int reservationNumber) {
     String sql = "delete from Reservation where reservation_key=?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -239,7 +246,7 @@ public class ReservationDataBase {
       pstmt.setInt(1, reservationNumber);
       pstmt.executeUpdate();
 
-      System.out.println("Reservation deleted successfully");
+      JOptionPane.showMessageDialog(null, "Reservation deleted successfully", "Reservation Deleted", JOptionPane.PLAIN_MESSAGE);
     } catch (SQLException e) {
       e.printStackTrace();
     }

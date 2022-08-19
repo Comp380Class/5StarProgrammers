@@ -25,18 +25,18 @@ public class User {
     // program displays whether room is available, if so prompt user for info(name,
     // age, email address, # of people, payment, check in & out dates)
     userInput = JOptionPane.showInputDialog("Enter check in date(DD/MM/YYYY)");
-    checkIn = LocalDate.parse(userInput, formatter);    
+    checkIn = LocalDate.parse(userInput, formatter);
     userInput = JOptionPane.showInputDialog("Enter check out date(DD/MM/YYYY)");
-    checkOut = LocalDate.parse(userInput, formatter);    
-	  fullName = JOptionPane.showInputDialog("Enter first and last name");
+    checkOut = LocalDate.parse(userInput, formatter);
+    fullName = JOptionPane.showInputDialog("Enter first and last name");
     spaceIndex = fullName.lastIndexOf(' ');
     firstName = fullName.substring(0, spaceIndex);
-    lastName = fullName.substring(spaceIndex+1);
+    lastName = fullName.substring(spaceIndex + 1);
     age = Integer.parseInt(JOptionPane.showInputDialog("Enter age"));
     partyNum = Integer.parseInt(JOptionPane.showInputDialog("Enter number of people in party"));
     emailAddr = JOptionPane.showInputDialog("Enter email address");
-    payment= JOptionPane.showInputDialog("Enter payment information");
-    
+    payment = JOptionPane.showInputDialog("Enter payment information");
+
     String searchFilter = searchForRoomType();
     int roomNumber = selectRoom(searchFilter);
     Reservation newReservation = new Reservation(lastName, firstName, age, payment, emailAddr, partyNum, roomNumber,
@@ -67,9 +67,10 @@ public class User {
       options[i] = filteredRooms.get(i).toString();
     }
     first = (String) options[0];
-    choice = JOptionPane.showInputDialog(null, "Please select the room you would like to book:", "Book Room", JOptionPane.QUESTION_MESSAGE, null, options, first);
+    choice = JOptionPane.showInputDialog(null, "Please select the room you would like to book:", "Book Room",
+        JOptionPane.QUESTION_MESSAGE, null, options, first);
     roomSelected = String.valueOf(choice);
-    roomNumberSelected = Integer.parseInt( roomSelected.substring(13, 16));
+    roomNumberSelected = Integer.parseInt(roomSelected.substring(13, 16));
     return verifyRoomSelection(roomNumberSelected, filteredRooms);
   }
 
@@ -100,7 +101,7 @@ public class User {
    *                     apply to his search.
    * @return integer representing the room number the user chose.
    */
-  private static int selectRoom(String searchFilter) {
+  protected static int selectRoom(String searchFilter) {
     ArrayList<Room> filteredRooms = RoomDataBase.filterRooms(searchFilter);
     int roomNumber = 0;
     roomNumber = displayFilteredRooms(filteredRooms);
@@ -115,32 +116,42 @@ public class User {
    * @return String representing the filter type the user would like to be
    *         applied.
    */
-  static String searchForRoomType() {
+   static String searchForRoomType() {
     String roomType;
     String first = "Regular";
     Object choice;
-    Object[] options = {"Regular" , "Smoking" , "Suite"};
-    choice = JOptionPane.showInputDialog(null, "Please select your preferred type of room:", "Room Selection", JOptionPane.QUESTION_MESSAGE, null, options, first);
+    Object[] options = { "Regular", "Smoking", "Suite" };
+    choice = JOptionPane.showInputDialog(null, "Please select your preferred type of room:", "Room Selection",
+        JOptionPane.QUESTION_MESSAGE, null, options, first);
     roomType = String.valueOf(choice);
     roomType = RoomDataBase.convertStringFilterToSQL(roomType);
     return roomType;
   }
 
   /**
-   *Allows user to cancel their reservation if their reservation key and last name match an
+   * Allows user to cancel their reservation if their reservation key and last
+   * name match an
    * entry in the Reservation table.
    */
   static void cancelReservation() {
     ReservationDataBase reservationManager = new ReservationDataBase();
     int reservationKey;
     reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
+
     if (reservationManager.doesReservationExist(reservationKey)) {
+      
+      Reservation customerReservation = reservationManager.getSpecificReservation(reservationKey);
+      Room customersRoom = RoomDataBase.getSpecifiedRoom(customerReservation.getRoomNumber());
+      Email confirmationEmail = new Email(customerReservation, customersRoom, reservationKey);
       reservationManager.cancelReservation(reservationKey);
+      confirmationEmail.sendEmail("cancel");
     } else {
-      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.",
+          "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
     }
   }
-
+//String searchFilter = searchForRoomType();
+//int roomNumber = selectRoom(searchFilter);
   /**
    * user inputs identifying data(name?, password?, payment info?), if successful
    * then they are given the option to request a different type of room
@@ -150,13 +161,17 @@ public class User {
     Reservation res;
     ReservationDataBase reservationManager = new ReservationDataBase();
     reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
-    if(reservationManager.doesReservationExist(reservationNum)){
+    if (reservationManager.doesReservationExist(reservationNum)) {
       res = reservationManager.getSpecificReservation(reservationNum);
-      newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
+      String searchFilter = searchForRoomType();
+      newRoomNum = selectRoom(searchFilter);
       reservationManager.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
-    }
-    else{
-      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
+      Room customersRoom = RoomDataBase.getSpecifiedRoom(newRoomNum);
+      Email confirmationEmail = new Email(res, customersRoom, reservationNum);
+      confirmationEmail.sendEmail("change");
+    } else {
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.",
+          "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -175,10 +190,12 @@ public class User {
       if (userReservation.getLastName().equals(userLastName)) {
         JOptionPane.showMessageDialog(null, userReservation, "Reservation", JOptionPane.PLAIN_MESSAGE);
       } else {
-        JOptionPane.showMessageDialog(null, "Incorrect information. Please try again.", "Error", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Incorrect information. Please try again.", "Error",
+            JOptionPane.PLAIN_MESSAGE);
       }
     } else {
-      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.", "Error", JOptionPane.PLAIN_MESSAGE);
+      JOptionPane.showMessageDialog(null, "Reservation does not exist. Please try again or contact customer service.",
+          "Error", JOptionPane.PLAIN_MESSAGE);
     }
   }
 }
@@ -194,13 +211,17 @@ class Manager extends User {
     Reservation res;
     ReservationDataBase reservationManager = new ReservationDataBase();
     reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
-    if(reservationManager.doesReservationExist(reservationNum)){
-      res = ReservationDataBase.getSpecificReservation(reservationNum);
-      newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
+    if (reservationManager.doesReservationExist(reservationNum)) {
+      res = reservationManager.getSpecificReservation(reservationNum);
+      String searchFilter = searchForRoomType();
+      newRoomNum = User.selectRoom(searchFilter);
       reservationManager.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
-    }
-    else{
-      JOptionPane.showMessageDialog(null, "Cannot find reservation in the hotel database!", "Error", JOptionPane.PLAIN_MESSAGE);
+      Room customersRoom = RoomDataBase.getSpecifiedRoom(newRoomNum);
+      Email confirmationEmail = new Email(res, customersRoom, reservationNum);
+      confirmationEmail.sendEmail("change");
+    } else {
+      JOptionPane.showMessageDialog(null, "Cannot find reservation in the hotel database!", "Error",
+          JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -213,14 +234,18 @@ class Manager extends User {
     int reservationKey;
     reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
     if (reservationManager.doesReservationExist(reservationKey)) {
+      Reservation customerReservation = reservationManager.getSpecificReservation(reservationKey);
+      Room customersRoom = RoomDataBase.getSpecifiedRoom(customerReservation.getRoomNumber());
+      Email confirmationEmail = new Email(customerReservation, customersRoom, reservationKey);
       reservationManager.cancelReservation(reservationKey);
+      confirmationEmail.sendEmail("cancel");
     } else {
       System.out.println("Reservation does not exist. Please try again or contact customer service.");
     }
   }
 
   /**
-   * user enters reservation number, database containing info for the room in the 
+   * user enters reservation number, database containing info for the room in the
    * reservation updates the name for the room with the name from the reservation
    */
   static void checkCustomerIn() {
@@ -230,8 +255,10 @@ class Manager extends User {
     reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
     if (reservationManager.doesReservationExist(reservationKey)) {
       res = reservationManager.getSpecificReservation(reservationKey);
-      resRoomNum = res.getRoomNumber();
-      // TODO: change name in room to name in reservation
+      Room customersRoom = RoomDataBase.getSpecifiedRoom(res.getRoomNumber());
+      customersRoom.setFirstName(res.getFirstName());
+      customersRoom.setLastName(res.getLastName());
+      RoomDataBase.checkCustomerIntoRoom(customersRoom);
     } else {
       System.out.println("Reservation does not exist. Please try again or contact customer service.");
     }

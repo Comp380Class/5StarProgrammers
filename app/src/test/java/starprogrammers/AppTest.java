@@ -3,14 +3,12 @@
  */
 package starprogrammers;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
@@ -21,12 +19,7 @@ class AppTest {
     assertNotNull(MysqlConnector.getConnection());
   }
 
-  static Room testRoom;
-
-  @BeforeAll
-  static void setUpRoom() {
-    testRoom = new Room("Test", "Test", 1, "Suite", "Queen", 1, 1, 1);
-  }
+  Room testRoom = new Room("Test", "Room", 999, "Suite", "Queen", 1, 1, 1);
 
   @Test
   void mySqlConnectorConnects() throws SQLException {
@@ -34,21 +27,16 @@ class AppTest {
   }
 
   @Test
-  void RoomManagerInsertsToTable() {
+
+  void RoomManager1InsertsToTable() {
     RoomDataBase.insertRoom(testRoom);
     assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()), "Room 001 should exist after being inserted.");
   }
 
   @Test
-  void RoomManagerCreatesRoom() {
-    RoomDataBase.insertRoom(testRoom);
-    assertNotNull(RoomDataBase.getSpecifiedRoom(testRoom.getRoomNumber()));
-  }
-
-  @Test
-  void RoomManagerDeletesFromTable() {
+  void RoomManager2DeletesFromTable() {
     assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
-    RoomDataBase.removeRoomFromTable(testRoom.getRoomNumber());
+    RoomDataBase.removeRoomFromTable((testRoom.getRoomNumber()));
     assertFalse(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
   }
 

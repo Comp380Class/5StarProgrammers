@@ -1,13 +1,16 @@
 package starprogrammers;
 
 import java.util.*;
+import javax.swing.JOptionPane;
 
 /**
  * 08/01/2022
  * Juan Vazquez
- * Hotel class serves as the a utility class that presents the user with menus of their possible
+ * Hotel class serves as the a utility class that presents the user with menus
+ * of their possible
  * options.
- * ArrayLists are used in this code in order to keep track of the different reservations
+ * ArrayLists are used in this code in order to keep track of the different
+ * reservations
  * or rooms that were read in from the database.
  */
 public class Hotel {
@@ -15,9 +18,12 @@ public class Hotel {
   /** prints all currently available rooms. */
   public static void printAllRooms() {
     ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
-    for (Room room : allRooms) {
-      System.out.println(room);
+    String output = "";
+    for (int i = 0; i < allRooms.size(); i++) {
+      output += allRooms.get(i);
+      output += "\n";
     }
+    JOptionPane.showMessageDialog(null, output, "All Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
   }
 
   /** prints all current reservations. */
@@ -29,9 +35,12 @@ public class Hotel {
   /** prints all currently reserved rooms. */
   public static void getReservedRooms() {
     ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
-    for (Room room : occupiedRooms) {
-      System.out.println(room);
-    }
+    if (occupiedRooms.size() > 0){
+      JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Occupied Rooms In Hotel",
+        JOptionPane.PLAIN_MESSAGE);
+    } else{
+    JOptionPane.showMessageDialog(null, "The hotel has 0 occupancy. ", "Hotel Occupancy",
+        JOptionPane.PLAIN_MESSAGE);}
   }
 
   /**
@@ -42,13 +51,13 @@ public class Hotel {
    */
   public static void getReservationsToCheckOut() {
     ReservationDataBase reservationManager = new ReservationDataBase();
-    ArrayList<Reservation> reservationsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
-    if (reservationsThatNeedCheckOut.size() > 0) {
-      for (Reservation reservation : reservationsThatNeedCheckOut) {
-        System.out.println(reservation);
-      }
+    ArrayList<Reservation> roomsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
+    if (roomsThatNeedCheckOut.size() > 0) {
+      JOptionPane.showMessageDialog(null, roomsThatNeedCheckOut, "Rooms That Need To Be Checked-out",
+          JOptionPane.PLAIN_MESSAGE);
     } else {
-      System.out.println("There are 0 rooms to check out today.");
+      JOptionPane.showMessageDialog(null, "There are currently no rooms that need to be checked-out.",
+          "No Rooms to Check-out", JOptionPane.PLAIN_MESSAGE);
     }
   }
 
@@ -170,28 +179,8 @@ public class Hotel {
 
   public static void main(String[] args) {
     RoomDataBase.initializationOfRoomTable();
-    Scanner scnr = new Scanner(System.in);
-    boolean exitFlag = false;
-    while (!exitFlag) {
-      System.out.println("");
-      System.out.println("0) Quit");
-      System.out.println("1) Log in as user");
-      System.out.println("3) Log in as employee");
-      int userInput = scnr.nextInt();
-      switch (userInput) {
-        case 0:
-          exitFlag = true;
-          break;
-        case 1:
-          presentUserOptions(scnr);
-          break;
-        case 3:
-          presentEmployeeOptions(scnr);
-          break;
-        default:
-          System.out.println("\nInvalid input. Please try one of the following options.");
-          break;
-      }
-    }
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationManager.createReservationTable();
+    HotelGUI.OpenHotelMenu();
   }
 }

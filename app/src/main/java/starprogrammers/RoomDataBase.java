@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 /**
  * RoomDataBase
  * 08/11/2022
@@ -151,7 +153,7 @@ public class RoomDataBase {
    */
   public static void removeRoomFromTable(int roomNumber) {
     if (doesRoomExist(roomNumber)) {
-      String sql = "DELETE FROM Room WHERE room_number = ?";
+      String sql = "DELETE FROM Room WHERE room_number=?";
       try (Connection conn = MysqlConnector.getConnection();) {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, roomNumber);
@@ -173,12 +175,11 @@ public class RoomDataBase {
    * @return true if the table already has that room inserted.
    */
   public static boolean doesRoomExist(int roomNumber) {
-    String sql = "SELECT room_number FROM Room where room_number = ?";
+    String sql = String.format("SELECT room_number FROM Room where room_number = %d", roomNumber);
     try (Connection conn = MysqlConnector.getConnection();) {
-      PreparedStatement pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, roomNumber);
-      ResultSet rs = pstmt.executeQuery();
-      if (rs.next()) {
+      Statement stmt = conn.createStatement();
+      ResultSet resultSet = stmt.executeQuery(sql);
+      if (resultSet.next()) {
         return true;
       }
     } catch (SQLException e) {
@@ -225,7 +226,7 @@ public class RoomDataBase {
       while (resultSet.next()) {
         Room room = new Room("null", "null", resultSet.getInt("room_number"), resultSet.getString("room_type"),
             resultSet.getString("bed_type"), resultSet.getInt("bed_quantity"), resultSet.getInt("room_price"),
-            resultSet.getInt("	number_of_occupants"));
+            resultSet.getInt("number_of_occupants"));
         allRooms.add(room);
       }
     } catch (SQLException e) {
@@ -345,5 +346,20 @@ public class RoomDataBase {
       e.printStackTrace();
     }
     return specifiedRoom;
+  }
+  public static void checkCustomerIntoRoom(Room customerRoom) {
+    String output;
+    String sql = "UPDATE Room SET first_name = ?, last_name = ?  WHERE room_number = ?";
+    try (Connection conn = MysqlConnector.getConnection();) {
+      PreparedStatement pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, customerRoom.getFirstName());
+      pstmt.setString(2, customerRoom.getLastName());
+      pstmt.setInt(3, customerRoom.getRoomNumber());
+      pstmt.executeUpdate();
+      output =  customerRoom.getLastName() + " " + customerRoom.getFirstName() + " has been checked into room " + customerRoom.getRoomNumber();
+      JOptionPane.showMessageDialog(null, output, "Customer has been checked into their room", JOptionPane.PLAIN_MESSAGE);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
 }
