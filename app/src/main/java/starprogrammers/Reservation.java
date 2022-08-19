@@ -15,8 +15,6 @@ import java.time.LocalDate;
 import java.time.Period;
 
 public class Reservation {
-    /** Represents the reservation number */
-    private String reservationId;
     /** Represents customer first name */
     private String customerFirstName;
     /** Represents customer last name */
@@ -38,7 +36,6 @@ public class Reservation {
 
     /** Represents the length of stay */
     private Period period;
-
 
     /**
      * Constructs a Reservation with customer information.

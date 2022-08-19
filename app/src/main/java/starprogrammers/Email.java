@@ -3,7 +3,6 @@ package starprogrammers;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-
 /**
  * 08/12/2022
  * Erin Maldonado
@@ -17,18 +16,20 @@ public class Email {
 
     private static Reservation res;
     private static Room room; 
+    private static int reservationKey;
 
-    Email(Reservation res, Room room){
+    Email(Reservation res, Room room, int reservationKey){
         this.res = res;
         this.room = room;
+        this.reservationKey = reservationKey;
     }
 
     /**
      * Sends the customer an email with booking information
-     * @param type reservation, cancellation or changes 
+     * @param String reservation, cancellation or changes 
      * to reservation
      */
-    public void sendEmail(String type) {
+    public boolean sendEmail(String type) {
         final String RECIPIENT = res.getCustomerEmail();
         Properties props = System.getProperties();
         String host = "smtp.gmail.com";
@@ -52,7 +53,7 @@ public class Email {
             // email will vary based on cancellation, reservation, or changes
             switch(type){
                 case "reserve":
-                message.setSubject("Reservation for " + res.getName()); 
+                message.setSubject("Reservation for " + res.getName() + " Confirmation# : " + reservationKey); 
                 message.setText(res.confirmationEmail(room)); break;
                 case "cancel":
                 message.setSubject("Cancellation for " + res.getName()); 
@@ -67,12 +68,15 @@ public class Email {
             transport.connect(host, USER_NAME, PASSWORD);
             transport.sendMessage(message, message.getAllRecipients());
             transport.close();
+            return true;
         }
         catch (AddressException ae) {
             ae.printStackTrace();
+            return false;
         }
         catch (MessagingException me) {
             me.printStackTrace();
+            return false;
         }
     }
 }

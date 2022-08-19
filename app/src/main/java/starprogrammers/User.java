@@ -41,9 +41,11 @@ public class User {
     int roomNumber = selectRoom(searchFilter);
     Reservation newReservation = new Reservation(lastName, firstName, age, payment, emailAddr, partyNum, roomNumber,
         checkIn, checkOut);
-    
-    ReservationDataBase.insertReservation(newReservation);
-    Email.sendEmail("reserve");
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    int reservationKey = reservationManager.insertReservation(newReservation);
+    Room customersRoom = RoomDataBase.getSpecifiedRoom(newReservation.getRoomNumber());
+    Email confirmationEmail = new Email(newReservation, customersRoom, reservationKey);
+    confirmationEmail.sendEmail("reserve");
     // if all prompts successfully completed, create new reservation and email
     // confirmation to user
   }
@@ -190,11 +192,12 @@ class Manager extends User {
   static void changeRoomReservation() {
     int reservationNum, newRoomNum;
     Reservation res;
+    ReservationDataBase reservationManager = new ReservationDataBase();
     reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
-    if(ReservationDataBase.doesReservationExist(reservationNum)){
+    if(reservationManager.doesReservationExist(reservationNum)){
       res = ReservationDataBase.getSpecificReservation(reservationNum);
       newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
-      ReservationDataBase.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
+      reservationManager.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
     }
     else{
       JOptionPane.showMessageDialog(null, "Cannot find reservation in the hotel database!", "Error", JOptionPane.PLAIN_MESSAGE);
