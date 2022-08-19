@@ -195,7 +195,7 @@ class Manager extends User {
     ReservationDataBase reservationManager = new ReservationDataBase();
     reservationNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the reservation number:"));
     if(reservationManager.doesReservationExist(reservationNum)){
-      res = ReservationDataBase.getSpecificReservation(reservationNum);
+      res = reservationManager.getSpecificReservation(reservationNum);
       newRoomNum = Integer.parseInt(JOptionPane.showInputDialog("Enter the number of the new room for the reservation:"));
       reservationManager.modifyRoomNumber(res.getRoomNumber(), newRoomNum);
     }

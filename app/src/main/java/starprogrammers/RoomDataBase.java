@@ -225,7 +225,7 @@ public class RoomDataBase {
       while (resultSet.next()) {
         Room room = new Room("null", "null", resultSet.getInt("room_number"), resultSet.getString("room_type"),
             resultSet.getString("bed_type"), resultSet.getInt("bed_quantity"), resultSet.getInt("room_price"),
-            resultSet.getInt("	number_of_occupants"));
+            resultSet.getInt("number_of_occupants"));
         allRooms.add(room);
       }
     } catch (SQLException e) {
