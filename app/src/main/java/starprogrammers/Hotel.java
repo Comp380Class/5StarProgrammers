@@ -179,6 +179,8 @@ public class Hotel {
 
   public static void main(String[] args) {
     RoomDataBase.initializationOfRoomTable();
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationManager.createReservationTable();
     HotelGUI.OpenHotelMenu();
   }
 }

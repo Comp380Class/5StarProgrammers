@@ -153,7 +153,7 @@ public class RoomDataBase {
    */
   public static void removeRoomFromTable(int roomNumber) {
     if (doesRoomExist(roomNumber)) {
-      String sql = "DELETE FROM Room WHERE room_number = ?";
+      String sql = "DELETE FROM Room WHERE room_number=?";
       try (Connection conn = MysqlConnector.getConnection();) {
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1, roomNumber);
@@ -175,12 +175,11 @@ public class RoomDataBase {
    * @return true if the table already has that room inserted.
    */
   public static boolean doesRoomExist(int roomNumber) {
-    String sql = "SELECT room_number FROM Room where room_number = ?";
+    String sql = String.format("SELECT room_number FROM Room where room_number = %d", roomNumber);
     try (Connection conn = MysqlConnector.getConnection();) {
-      PreparedStatement pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, roomNumber);
-      ResultSet rs = pstmt.executeQuery();
-      if (rs.next()) {
+      Statement stmt = conn.createStatement();
+      ResultSet resultSet = stmt.executeQuery(sql);
+      if (resultSet.next()) {
         return true;
       }
     } catch (SQLException e) {
