@@ -42,10 +42,10 @@ public class User {
     Reservation newReservation = new Reservation(lastName, firstName, age, payment, emailAddr, partyNum, roomNumber,
         checkIn, checkOut);
     ReservationDataBase reservationManager = new ReservationDataBase();
-    reservationManager.insertReservation(newReservation);
+    int reservationKey = reservationManager.insertReservation(newReservation);
     Room customersRoom = RoomDataBase.getSpecifiedRoom(newReservation.getRoomNumber());
-    Email confirmationEmail = new Email(newReservation, customersRoom);
-    confirmationEmail.sendEmail("Reserve");
+    Email confirmationEmail = new Email(newReservation, customersRoom, reservationKey);
+    confirmationEmail.sendEmail("reserve");
     // if all prompts successfully completed, create new reservation and email
     // confirmation to user
   }

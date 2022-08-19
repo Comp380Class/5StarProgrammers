@@ -1,6 +1,5 @@
 package starprogrammers;
 
-
 /**
  * 08/09/2022
  * Erin Maldonado
@@ -15,7 +14,7 @@ package starprogrammers;
  * inputs the reservation to the database. 
  * 
  */
- 
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -24,6 +23,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.sql.*;
 
 public class ReservationDataBase {
   ReservationDataBase() {
@@ -108,13 +108,14 @@ public class ReservationDataBase {
    * 
    * @param r Reservation object.
    */
-  public void insertReservation(Reservation r) {
+  public int insertReservation(Reservation r) {
+    int reservationKey = -1;
     if (!doesRowExist(r.getFirstName(), r.getLastName())) {
       try (Connection conn = MysqlConnector.getConnection();) {
         String SQL = "INSERT INTO Reservation (last_name, first_name, age,"
             + " payment_info, email, total_occupants, room_number,"
             + " check_in, check_out)VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        PreparedStatement pstmt = conn.prepareStatement(SQL);
+        PreparedStatement pstmt = conn.prepareStatement(SQL, PreparedStatement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, r.getLastName());
         pstmt.setString(2, r.getFirstName());
         pstmt.setInt(3, r.getCustomerAge());
@@ -125,13 +126,17 @@ public class ReservationDataBase {
         pstmt.setDate(8, r.getCheckIn());
         pstmt.setDate(9, r.getCheckOut());
 
-        pstmt.executeUpdate();
+       pstmt.executeUpdate();
         System.out.println("Inserted records into the table...");
-
+      ResultSet generatedKeys = pstmt.getGeneratedKeys();
+      generatedKeys.next();
+      reservationKey =(int) generatedKeys.getLong(1);
+      return reservationKey;
       } catch (SQLException e) {
         e.printStackTrace();
       }
     }
+    return reservationKey;
   }
 
   /**
@@ -231,7 +236,7 @@ public class ReservationDataBase {
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
 
-      pstmt.setInt(1, 2);
+      pstmt.setInt(1, reservationNumber);
       pstmt.executeUpdate();
 
       System.out.println("Reservation deleted successfully");
@@ -272,11 +277,14 @@ public class ReservationDataBase {
     return specifiedReservation;
 
   }
-/**
- * Searches Reservation table for specific reservation using reservation key.
- * @param reservationKey int representing the reservation key that was given to the customer when he reserved a room.
- * @return true if the reservation exists in the table, false if it does not.
- */
+  
+  /**
+   * Searches Reservation table for specific reservation using reservation key.
+   * 
+   * @param reservationKey int representing the reservation key that was given to
+   *                       the customer when he reserved a room.
+   * @return true if the reservation exists in the table, false if it does not.
+   */
   public boolean doesReservationExist(int reservationKey) {
     String sql = "SELECT first_name FROM Reservation WHERE reservation_key = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
@@ -291,14 +299,17 @@ public class ReservationDataBase {
     }
     return false;
   }
+
   /**
-   * Searches Reservation table for all reservations that need to be checked out on the current date.
-   * @return array list of Reservation objects that need to be checked out. 
+   * Searches Reservation table for all reservations that need to be checked out
+   * on the current date.
+   * 
+   * @return array list of Reservation objects that need to be checked out.
    */
   public ArrayList<Reservation> getReservationsThatNeedCheckOut() {
     ArrayList<Reservation> roomsToBeCheckedOut = new ArrayList<Reservation>();
     String sql = "SELECT reservation_key, first_name, last_name, payment_info, email, "
-    + "age, total_occupants, room_number, check_in, check_out FROM Reservation WHERE check_out = ?";
+        + "age, total_occupants, room_number, check_in, check_out FROM Reservation WHERE check_out = ?";
     try (Connection conn = MysqlConnector.getConnection();) {
       PreparedStatement pstmt = conn.prepareStatement(sql);
       pstmt.setDate(1, java.sql.Date.valueOf(LocalDate.now()));
