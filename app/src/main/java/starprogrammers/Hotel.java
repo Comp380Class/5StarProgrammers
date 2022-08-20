@@ -33,14 +33,16 @@ public class Hotel {
   }
 
   /** prints all currently reserved rooms. */
-  public static void getReservedRooms() {
+  public static ArrayList<Room> getReservedRooms() {
     ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
-    if (occupiedRooms.size() > 0){
+    if (occupiedRooms.size() > 0) {
       JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Occupied Rooms In Hotel",
-        JOptionPane.PLAIN_MESSAGE);
-    } else{
-    JOptionPane.showMessageDialog(null, "The hotel has 0 occupancy. ", "Hotel Occupancy",
-        JOptionPane.PLAIN_MESSAGE);}
+          JOptionPane.PLAIN_MESSAGE);
+      return occupiedRooms;
+    } else
+      JOptionPane.showMessageDialog(null, "The hotel has 0 occupancy. ", "Hotel Occupancy",
+          JOptionPane.PLAIN_MESSAGE);
+    return occupiedRooms;
   }
 
   /**
