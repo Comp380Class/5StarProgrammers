@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 
 class AppTest {
@@ -16,4 +17,16 @@ class AppTest {
   void mySqlConnectorConnects() throws SQLException {
     assertNotNull(MysqlConnector.getConnection());
   } 
+  @Test
+  void hotelGetOccupiedRoomsTest(){
+    Room testRoom = new Room("lastName", "firstName", 989, "Suite", "King", 1, 1000, 1);
+    RoomDataBase.insertRoom(testRoom);
+    assertEquals(1, Hotel.getReservedRooms().size(), "The only occupied room is testRoom");
+    RoomDataBase.removeRoomFromTable(989);
+
+  }
+  @Test
+  void hotelGetOccupiedRoomsTestElse(){
+    assertEquals(0, Hotel.getReservedRooms().size(), "Rooms with null names are unoccupied, 0 rooms occupied.");
+  }
 }

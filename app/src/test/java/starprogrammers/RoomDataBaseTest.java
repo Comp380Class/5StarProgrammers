@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
-public class FilterRoomTest {
+class FilterRoomTest {
   Room testRoom = new Room("Test", "Room", 999, "Suite", "Queen", 1, 1, 1);
 
   @Test
