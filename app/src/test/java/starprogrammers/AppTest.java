@@ -12,23 +12,8 @@ import java.sql.SQLException;
 
 
 class AppTest {
-  Room testRoom = new Room("Test", "Room", 999, "Suite", "Queen", 1, 1, 1);
-
   @Test
   void mySqlConnectorConnects() throws SQLException {
     assertNotNull(MysqlConnector.getConnection());
-  }
-
-  @Test
-  void RoomManager1InsertsToTable() {
-    RoomDataBase.insertRoom(testRoom);
-    assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()), "Room 999 should exist after being inserted.");
-  }
-
-  @Test
-  void RoomManager2DeletesFromTable() {
-    assertTrue(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
-    RoomDataBase.removeRoomFromTable((testRoom.getRoomNumber()));
-    assertFalse(RoomDataBase.doesRoomExist(testRoom.getRoomNumber()));
-  }
+  } 
 }
