@@ -2,7 +2,6 @@ package starprogrammers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
@@ -116,7 +115,7 @@ public class User {
    * @return String representing the filter type the user would like to be
    *         applied.
    */
-   static String searchForRoomType() {
+  static String searchForRoomType() {
     String roomType;
     String first = "Regular";
     Object choice;
@@ -137,9 +136,7 @@ public class User {
     ReservationDataBase reservationManager = new ReservationDataBase();
     int reservationKey;
     reservationKey = Integer.parseInt(JOptionPane.showInputDialog("Enter your reservation number:"));
-
     if (reservationManager.doesReservationExist(reservationKey)) {
-      
       Reservation customerReservation = reservationManager.getSpecificReservation(reservationKey);
       Room customersRoom = RoomDataBase.getSpecifiedRoom(customerReservation.getRoomNumber());
       Email confirmationEmail = new Email(customerReservation, customersRoom, reservationKey);
@@ -150,8 +147,9 @@ public class User {
           "Unable to find reservation", JOptionPane.PLAIN_MESSAGE);
     }
   }
-//String searchFilter = searchForRoomType();
-//int roomNumber = selectRoom(searchFilter);
+
+  // String searchFilter = searchForRoomType();
+  // int roomNumber = selectRoom(searchFilter);
   /**
    * user inputs identifying data(name?, password?, payment info?), if successful
    * then they are given the option to request a different type of room
