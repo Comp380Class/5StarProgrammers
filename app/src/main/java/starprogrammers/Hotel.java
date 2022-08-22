@@ -1,36 +1,73 @@
 package starprogrammers;
 
-import java.time.LocalDate;
 import java.util.*;
+import javax.swing.JOptionPane;
 
+/**
+ * 08/01/2022
+ * Juan Vazquez
+ * Hotel class serves as the a utility class that presents the user with menus
+ * of their possible
+ * options.
+ * ArrayLists are used in this code in order to keep track of the different
+ * reservations
+ * or rooms that were read in from the database.
+ */
 public class Hotel {
 
-  private Hotel() {}
-
-  private static ArrayList<Room> availableRooms = new ArrayList<Room>();
-
-  /** @return returns an ArrayList of all currently available rooms. */
-  public static ArrayList<Room> getAvailableRooms() {
-    // TODO: Add code for getting rooms once we figure out how we're querying to DB
-    //	ReservationGenerator.getAvailableRooms();
-    return availableRooms;
-  }
-  /** @return returns an ArrayList of all current reservations. */
-  public ArrayList<Reservation> getReservations() {
-    // TODO: Add code for getting reservations after we figure out the db.
-	  return null;
+  /** prints all currently available rooms. */
+  public static void printAllRooms() {
+    ArrayList<Room> allRooms = RoomDataBase.getAllRooms();
+    String output = "";
+    for (int i = 0; i < allRooms.size(); i++) {
+      output += allRooms.get(i);
+      output += "\n";
+    }
+    JOptionPane.showMessageDialog(null, output, "All Rooms In Hotel", JOptionPane.PLAIN_MESSAGE);
   }
 
-  /** @return returns an ArrayList of all currently reserved rooms. */
-  public ArrayList<Room> getReservedRooms() {
-    // TODO: Call the method from the class managing the rooms.
-	  return null;
+  /** prints all current reservations. */
+  public static void getReservations() {
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationManager.printDatabase();
+  }
+
+  /** prints all currently reserved rooms. */
+  public static ArrayList<Room> getReservedRooms() {
+    ArrayList<Room> occupiedRooms = RoomDataBase.getAllOccupiedRooms();
+    if (occupiedRooms.size() > 0) {
+      JOptionPane.showMessageDialog(null, occupiedRooms, "All Currently Occupied Rooms In Hotel",
+          JOptionPane.PLAIN_MESSAGE);
+      return occupiedRooms;
+    } else
+      JOptionPane.showMessageDialog(null, "The hotel has 0 occupancy. ", "Hotel Occupancy",
+          JOptionPane.PLAIN_MESSAGE);
+    return occupiedRooms;
   }
 
   /**
-   * Generates a text-user-interface with various reports that a Manager might want to view.
+   * uses ReservationDataBase class to search for reservations/rooms that need to
+   * be checked
+   * out on current date. If more than 0 reservations are returned, they are
+   * printed to screen.
+   */
+  public static void getReservationsToCheckOut() {
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    ArrayList<Reservation> roomsThatNeedCheckOut = reservationManager.getReservationsThatNeedCheckOut();
+    if (roomsThatNeedCheckOut.size() > 0) {
+      JOptionPane.showMessageDialog(null, roomsThatNeedCheckOut, "Rooms That Need To Be Checked-out",
+          JOptionPane.PLAIN_MESSAGE);
+    } else {
+      JOptionPane.showMessageDialog(null, "There are currently no rooms that need to be checked-out.",
+          "No Rooms to Check-out", JOptionPane.PLAIN_MESSAGE);
+    }
+  }
+
+  /**
+   * Generates a text-user-interface with various reports that a Manager might
+   * want to view.
    *
-   * @param Scanner object passed from the main method.
+   * @param scnr scanner object passed from the main method.
    */
   private static void generateManagerReport(Scanner scnr) {
     boolean exitFlag = false;
@@ -39,69 +76,37 @@ public class Hotel {
       System.out.println("0) Back");
       System.out.println("1) All available rooms");
       System.out.println("2) All current reservations.");
-      System.out.println(
-          "3) All Rooms that need to be Checked-Out."); // Room XXX needs to check out.
-      System.out.println("4) All reserved rooms"); // Room reserved by X from checkIn to Checkout.
+      System.out.println("3) All Reservations that need to be Checked-Out.");
+      System.out.println("4) All reserved rooms");
       int userInput = scnr.nextInt();
       switch (userInput) {
         case 0:
           exitFlag = true;
           break;
-        case 1: // TODO:
-          System.out.println("CALL getAvailableRooms()  TO LOOK UP ALL ROOMS IN DB");
-          getAvailableRooms();
+        case 1:
+          printAllRooms();
           break;
-        case 2: // TODO:
-          System.out.println("CALL getReservations() TO LOOK UP ALL RESERVATIONS IN DB");
-          // getReservations();
+        case 2:
+          getReservations();
           break;
-        case 3: // TODO:
-          System.out.println("FIND ROOMS THAT NEED TO BE CHECKED OUT TODAY");
-          // getUnavailableRooms()?
-          // with checkOut today?
+        case 3:
+          getReservationsToCheckOut();
+
           break;
-        case 4: // TODO:
-          System.out.println("FIND ROOMS THAT ARE CURRENTLY OCCUPIED");
+        case 4:
+          getReservedRooms();
           break;
         default:
           System.out.println("Invalid input. Please select one of the following options.");
       }
     }
-  }
-  /**
-   * Receives input from a user to gather customer information.
-   *
-   * @param Scanner object passed in by the main method.
-   */
-  private static void receiveCustomerInformation(Scanner scnr) {
-    System.out.println("Enter Name: ");
-    String customerName = scnr.next();
-    System.out.println("Enter Age: ");
-    int customerAge = scnr.nextInt();
-    System.out.println("Enter payment information");
-    String customerPaymentInfo = scnr.nextLine();
-    System.out.println("Enter Email: ");
-    String customerEmail = scnr.next();
-    System.out.println("Enter number of occupants: ");
-    int numberOfOccupants = scnr.nextInt();
-    System.out.println("Enter check in date(YYYY MM DD)");
-    int checkInYear = scnr.nextInt();
-    int checkInMonth = scnr.nextInt();
-    int checkInDay = scnr.nextInt();
-    LocalDate checkInDate = LocalDate.of(checkInYear, checkInMonth, checkInDay);
-    System.out.println("Enter check out date (YYYY MM DD)");
-    int checkOutYear = scnr.nextInt();
-    int checkOutMonth = scnr.nextInt();
-    int checkOutDay = scnr.nextInt();
-    LocalDate checkOutDate = LocalDate.of(checkOutYear, checkOutMonth, checkOutDay);
 
-    // TODO: NEED TO DO SOMETHING WITH THIS CUSTOMER INFORMATION.
   }
 
   /**
    * Presents a text user interface for customers.
-   *
-   * @param scanner object passed by main method.
+   * 
+   * @param scnr scanner object passed in by main.
    */
   private static void presentUserOptions(Scanner scnr) {
     boolean exitFlag = false;
@@ -135,10 +140,11 @@ public class Hotel {
       }
     }
   }
+
   /**
    * Presents a text user interface for employee options and manager reports.
    *
-   * @param Scanner object passed by main method.
+   * @param scnr object passed by main method.
    */
   private static void presentEmployeeOptions(Scanner scnr) {
     boolean exitFlag = false;
@@ -173,44 +179,10 @@ public class Hotel {
     }
   }
 
-  /**
-   * Generates a text-user-interface with 2 options to select the user-type and 1 option to * quit
-   * the program.
-   */
   public static void main(String[] args) {
-    createHardCodedRoom();
-    Scanner scnr = new Scanner(System.in);
-    boolean exitFlag = false;
-    while (!exitFlag) {
-      System.out.println("");
-      System.out.println("0) Quit");
-      System.out.println("1) Log in as user");
-      System.out.println("3) Log in as employee");
-      int userInput = scnr.nextInt();
-      switch (userInput) {
-        case 0:
-          exitFlag = true;
-          break;
-        case 1:
-          // create user object.
-          // user should have a menu of their options.
-          // user chooses "book room" gather customer information.
-          presentUserOptions(scnr);
-          break;
-        case 3:
-          // create manager object.
-          // manager should have menu of their options.
-          presentEmployeeOptions(scnr);
-          break;
-        default:
-          System.out.println("\nInvalid input. Please try one of the following options.");
-          break;
-      }
-    }
-  }
-  /** Hard coded room just used only for testing and integration. REMOVE BEFORE PROGRAM RELEASE. */
-  private static void createHardCodedRoom() {
-    Room testRoom = new Room("Unassigned", 101, "Suite", "King", 1, 50, 2);
-    availableRooms.add(testRoom);
+    RoomDataBase.initializationOfRoomTable();
+    ReservationDataBase reservationManager = new ReservationDataBase();
+    reservationManager.createReservationTable();
+    HotelGUI.OpenHotelMenu();
   }
 }

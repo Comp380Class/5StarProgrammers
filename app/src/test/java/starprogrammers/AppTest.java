@@ -4,21 +4,29 @@
 package starprogrammers;
 
 import org.junit.jupiter.api.Test;
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+
+
 class AppTest {
-    @Test void mysqlConnects() {
-        String url1 = "jdbc:mysql://sql3.freesqldatabase.com/sql3507015";
-        String user = "sql3507015";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertTrue(classUnderTest.connect(), "app should have a connection");
-    }
-     @Test void mysqlFailConnect() {
-        String url1 = "null";
-        String user = "null";
-        String password = "89vXtgDWyc";
-        mysqlConnector classUnderTest = new mysqlConnector(url1, user, password);
-        assertFalse(classUnderTest.connect(), "app should fail if credentials/url incorrect.");
-    }
+  @Test
+  void mySqlConnectorConnects() throws SQLException {
+    assertNotNull(MysqlConnector.getConnection());
+  } 
+  @Test
+  void hotelGetOccupiedRoomsTest(){
+    Room testRoom = new Room("lastName", "firstName", 989, "Suite", "King", 1, 1000, 1);
+    RoomDataBase.insertRoom(testRoom);
+    assertEquals(1, Hotel.getReservedRooms().size(), "The only occupied room is testRoom");
+    RoomDataBase.removeRoomFromTable(989);
+
+  }
+  @Test
+  void hotelGetOccupiedRoomsTestElse(){
+    assertEquals(0, Hotel.getReservedRooms().size(), "Rooms with null names are unoccupied, 0 rooms occupied.");
+  }
 }
